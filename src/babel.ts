@@ -20,6 +20,7 @@ export default function nextI18nextCompressBabelPlugin(
 
     visitor: {
       CallExpression(path) {
+        // istanbul ignore next
         if (processedNodes.has(path.node)) return
 
         // Only handle functions with the name `t` and at least one argument
@@ -41,6 +42,7 @@ export default function nextI18nextCompressBabelPlugin(
       },
 
       JSXElement(path) {
+        // istanbul ignore next
         if (processedNodes.has(path.node)) return
 
         // Only handle JSX elements with the name `Trans` and either one text child or no children

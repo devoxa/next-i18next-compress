@@ -18,6 +18,8 @@
   },
   "prettier": "@devoxa/prettier-config",
   "devDependencies": {
+    "@babel/core": "^7.14.3",
+    "@babel/plugin-syntax-jsx": "^7.12.13",
     "@babel/traverse": "^7.14.2",
     "@babel/types": "^7.14.2",
     "@devoxa/eslint-config": "^2.0.5",
