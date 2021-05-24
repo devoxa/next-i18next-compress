@@ -77,7 +77,7 @@ module.exports = {
   },
 
   // Add the `next-i18next-compress` configuration
-  ...i18nextCompress,
+  ...i18nextCompress(),
 }
 ```
 
