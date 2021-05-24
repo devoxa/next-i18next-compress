@@ -11,6 +11,8 @@ interface Babel {
   types: typeof BabelTypes
 }
 
+type State = { opts?: Partial<Options>; file: { opts: { filename?: string } } }
+
 export default function nextI18nextCompressBabelPlugin(
   babel: Babel
 ): { name: string; visitor: Visitor } {
@@ -20,8 +22,16 @@ export default function nextI18nextCompressBabelPlugin(
     name: 'next-i18next-compress',
 
     visitor: {
-      CallExpression(path, state) {
-        const options = mergeDefaultOptions((state as { opts?: Partial<Options> }).opts)
+      CallExpression(path, _state) {
+        const state = _state as State
+
+        // Do not process any files in `node_modules/`, since this can cause issues with minified code
+        // istanbul ignore next
+        if (state.file.opts.filename && state.file.opts.filename.includes('/node_modules/')) {
+          return
+        }
+
+        const options = mergeDefaultOptions(state.opts)
 
         // istanbul ignore next
         if (processedNodes.has(path.node)) return
@@ -42,8 +52,16 @@ export default function nextI18nextCompressBabelPlugin(
         processedNodes.add(path.node)
       },
 
-      JSXElement(path, state) {
-        const options = mergeDefaultOptions((state as { opts?: Partial<Options> }).opts)
+      JSXElement(path, _state) {
+        const state = _state as State
+
+        // Do not process any files in `node_modules/`, since this can cause issues with minified code
+        // istanbul ignore next
+        if (state.file.opts.filename && state.file.opts.filename.includes('/node_modules/')) {
+          return
+        }
+
+        const options = mergeDefaultOptions(state.opts)
 
         // istanbul ignore next
         if (processedNodes.has(path.node)) return
