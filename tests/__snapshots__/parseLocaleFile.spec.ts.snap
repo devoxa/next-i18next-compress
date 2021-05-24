@@ -1,0 +1,12 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`parseLocaleFile correctly compresses the keys of the locale file 1`] = `
+Object {
+  "Or <1>start your 30-day free trial</1>": "Oder <1>beginne deine 30-Tage kostenlose Probephase</1>",
+  "bb42f8": "Passwort vergessen",
+  "d9055f": "Deine Anmeldedaten waren inkorrekt.",
+  "f2488f": "E-Mail Adresse",
+}
+`;
+
+exports[`parseLocaleFile throws an error if there are any compression collisions 1`] = `"[next-i18next-compress] Compression collision detected: \\"Email address\\" and \\"Forgot password\\" compress to the same hash \\"foobar\\""`;

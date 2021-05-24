@@ -1,4 +1,4 @@
-import fsBackend from '../src/fsBackend'
+import { parseLocaleFile } from '../src/parseLocaleFile'
 import * as compressKeyModule from '../src/compressKey'
 
 const compressKeySpy = jest.spyOn(compressKeyModule, 'compressKey')
@@ -11,9 +11,7 @@ const localeFileString = JSON.stringify({
   'Your sign in credentials were incorrect.': 'Deine Anmeldedaten waren inkorrekt.',
 })
 
-describe('fsBackend', () => {
-  const parseLocaleFile = fsBackend.backend.parse
-
+describe('parseLocaleFile', () => {
   it('correctly compresses the keys of the locale file', () => {
     expect(parseLocaleFile(localeFileString)).toMatchSnapshot()
   })

@@ -1,6 +1,6 @@
 import { compressKey } from './compressKey'
 
-function parseLocaleFile(string: string) {
+export function parseLocaleFile(string: string) {
   const json = JSON.parse(string)
 
   const compressedKeys: Record<string, string> = {}
@@ -24,5 +24,3 @@ function parseLocaleFile(string: string) {
 
   return compressedJson
 }
-
-export default { backend: { parse: parseLocaleFile } }
