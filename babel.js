@@ -1,1 +1,1 @@
-module.exports = require('./dist/babel.js')
+module.exports = require('./dist/src/babel.js')
