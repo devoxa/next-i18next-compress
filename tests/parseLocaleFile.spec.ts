@@ -24,4 +24,9 @@ describe('parseLocaleFile', () => {
     compressKeySpy.mockImplementation(() => 'foobar')
     expect(() => parseLocaleFile(localeFileString)).toThrowErrorMatchingSnapshot()
   })
+
+  it('does nothing if running in development', () => {
+    process.env.NODE_ENV = 'development'
+    expect(parseLocaleFile(localeFileString)).toEqual(JSON.parse(localeFileString))
+  })
 })

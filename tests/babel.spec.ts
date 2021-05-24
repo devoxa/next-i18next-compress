@@ -2,12 +2,14 @@ import { transformSync } from '@babel/core'
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore Import JSX syntax support plugin
 import jsxSyntaxPlugin from '@babel/plugin-syntax-jsx'
+import { TransformOptions } from '@babel/core'
 import babelPlugin from '../src/babel'
 import { Options } from '../src/options'
 
-function transform(input: string, options?: Partial<Options>) {
+function transform(input: string, options?: Partial<Options>, babelOptions?: TransformOptions) {
   const output = transformSync(input, {
     plugins: [jsxSyntaxPlugin, options ? [babelPlugin, options] : [babelPlugin]],
+    ...babelOptions,
   })
 
   return output?.code
@@ -208,5 +210,41 @@ describe('babel', () => {
 
       expect(() => transform(input)).toThrowErrorMatchingSnapshot()
     })
+  })
+
+  it('does nothing if the file is in node_modules', () => {
+    const input = `
+      export function ReactComponent() {
+        const { t } = useTranslation('namespace')
+        return (
+          <Box>
+            <Input label={t('Email address')} />
+            <Trans t={t}>Forgot password</Trans>
+          </Box>
+        )
+      }
+    `
+
+    expect(
+      transform(input, undefined, { filename: 'client/node_modules/lodash/index.js' })
+    ).toMatchSnapshot()
+  })
+
+  it('does nothing if running in development', () => {
+    process.env.NODE_ENV = 'development'
+
+    const input = `
+      export function ReactComponent() {
+        const { t } = useTranslation('namespace')
+        return (
+          <Box>
+            <Input label={t('Email address')} />
+            <Trans t={t}>Forgot password</Trans>
+          </Box>
+        )
+      }
+    `
+
+    expect(transform(input)).toMatchSnapshot()
   })
 })

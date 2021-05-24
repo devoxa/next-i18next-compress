@@ -113,3 +113,27 @@ exports[`babel \`t\` function ignores function calls with no arguments 1`] = `
   return <Input label={t()} />;
 }"
 `;
+
+exports[`babel does nothing if running in development 1`] = `
+"export function ReactComponent() {
+  const {
+    t
+  } = useTranslation('namespace');
+  return <Box>
+            <Input label={t('Email address')} />
+            <Trans t={t}>Forgot password</Trans>
+          </Box>;
+}"
+`;
+
+exports[`babel does nothing if the file is in node_modules 1`] = `
+"export function ReactComponent() {
+  const {
+    t
+  } = useTranslation('namespace');
+  return <Box>
+            <Input label={t('Email address')} />
+            <Trans t={t}>Forgot password</Trans>
+          </Box>;
+}"
+`;

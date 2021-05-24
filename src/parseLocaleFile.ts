@@ -5,6 +5,7 @@ export function parseLocaleFile(string: string, pOptions?: Options) {
   const options = mergeDefaultOptions(pOptions)
   const json = JSON.parse(string)
 
+  // Do not process any files in development
   if (process.env.NODE_ENV === 'development') {
     return json
   }

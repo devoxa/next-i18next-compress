@@ -18,10 +18,6 @@ export default function nextI18nextCompressBabelPlugin(
 ): { name: string; visitor: Visitor } {
   const t = babel.types
 
-  if (process.env.NODE_ENV === 'development') {
-    return { name: 'next-i18next-compress', visitor: {} }
-  }
-
   return {
     name: 'next-i18next-compress',
 
@@ -29,8 +25,12 @@ export default function nextI18nextCompressBabelPlugin(
       CallExpression(path, _state) {
         const state = _state as State
 
+        // Do not process any files in development
+        if (process.env.NODE_ENV === 'development') {
+          return
+        }
+
         // Do not process any files in `node_modules/`, since this can cause issues with minified code
-        // istanbul ignore next
         if (state.file.opts.filename && state.file.opts.filename.includes('/node_modules/')) {
           return
         }
@@ -59,8 +59,12 @@ export default function nextI18nextCompressBabelPlugin(
       JSXElement(path, _state) {
         const state = _state as State
 
+        // Do not process any files in development
+        if (process.env.NODE_ENV === 'development') {
+          return
+        }
+
         // Do not process any files in `node_modules/`, since this can cause issues with minified code
-        // istanbul ignore next
         if (state.file.opts.filename && state.file.opts.filename.includes('/node_modules/')) {
           return
         }
