@@ -14,9 +14,9 @@ export function parseLocaleFile(string: string, pOptions?: Options) {
     // The compressed key already exists, throw a collision error
     if (compressedKeys[compressedKey]) {
       const message =
-        `[next-i18next-compress] Compression collision detected: ` +
+        `[next-i18next-compress] Compression collision: ` +
         `"${compressedKeys[compressedKey]}" and "${key}" compress to the same hash "${compressedKey}".` +
-        `Try increasing the "hashLength" option or splitting your locale file.`
+        `Try increasing the "hashLength" option or splitting your locale file into more namespaces.`
 
       throw new Error(message)
     }

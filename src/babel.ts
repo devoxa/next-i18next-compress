@@ -33,9 +33,7 @@ export default function nextI18nextCompressBabelPlugin(
         // We don't support cases where the argument is not a string, because
         // we can't figure out what the actual value is easily.
         if (path.node.arguments[0].type !== 'StringLiteral') {
-          return unsupportedPluginUsage(
-            '`t(variable)` is not supported, has to be a string literal'
-          )
+          return unsupportedCodeUse('`t(variable)` is not supported, use a string literal instead.')
         }
 
         // Compress the argument value (this is either the `i18nKey` or the natural key)
@@ -59,7 +57,9 @@ export default function nextI18nextCompressBabelPlugin(
         // because there might be a `i18nKey` in it that we might overwrite.
         const elementMixedAttributes = path.node.openingElement.attributes
         if (elementMixedAttributes.some((x) => x.type === 'JSXSpreadAttribute')) {
-          return unsupportedPluginUsage('`<Trans {...variable}>` is not supported')
+          return unsupportedCodeUse(
+            '`<Trans {...variable}>` is not supported, use explicit attributes instead.'
+          )
         }
         const elementJsxAttributes = elementMixedAttributes as Array<BabelTypes.JSXAttribute>
 
@@ -70,8 +70,8 @@ export default function nextI18nextCompressBabelPlugin(
           // We don't support cases where the attribute is not a string, because
           // we can't figure out what the actual value is easily.
           if (i18nKeyAttribute.value.type !== 'StringLiteral') {
-            return unsupportedPluginUsage(
-              '`<Trans i18nKey={variable}>` is not supported, has to be a string literal'
+            return unsupportedCodeUse(
+              '`<Trans i18nKey={variable}>` is not supported, use a string literal instead.'
             )
           }
 
@@ -112,6 +112,6 @@ export default function nextI18nextCompressBabelPlugin(
   }
 }
 
-function unsupportedPluginUsage(message: string) {
-  throw new Error('[next-i18next-compress] Unsupported usage detected: ' + message)
+function unsupportedCodeUse(message: string) {
+  throw new Error('[next-i18next-compress] Unsupported code use: ' + message)
 }
