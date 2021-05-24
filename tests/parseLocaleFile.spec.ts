@@ -16,6 +16,10 @@ describe('parseLocaleFile', () => {
     expect(parseLocaleFile(localeFileString)).toMatchSnapshot()
   })
 
+  it('can configure the length of the compressed key', () => {
+    expect(parseLocaleFile(localeFileString, { hashLength: 16 })).toMatchSnapshot()
+  })
+
   it('throws an error if there are any compression collisions', async () => {
     compressKeySpy.mockImplementation(() => 'foobar')
     expect(() => parseLocaleFile(localeFileString)).toThrowErrorMatchingSnapshot()

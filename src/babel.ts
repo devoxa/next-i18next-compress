@@ -1,6 +1,7 @@
 import * as BabelTypes from '@babel/types'
 import { Visitor } from '@babel/traverse'
 import { compressKey } from './compressKey'
+import { mergeDefaultOptions, Options } from './options'
 
 // We keep a set of processed nodes, because Babel may traverse the same node twice,
 // which would cause us to compress the key twice.
@@ -19,7 +20,9 @@ export default function nextI18nextCompressBabelPlugin(
     name: 'next-i18next-compress',
 
     visitor: {
-      CallExpression(path) {
+      CallExpression(path, state) {
+        const options = mergeDefaultOptions((state as { opts?: Partial<Options> }).opts)
+
         // istanbul ignore next
         if (processedNodes.has(path.node)) return
 
@@ -36,12 +39,14 @@ export default function nextI18nextCompressBabelPlugin(
         }
 
         // Compress the argument value (this is either the `i18nKey` or the natural key)
-        path.node.arguments[0].value = compressKey(path.node.arguments[0].value, 6)
+        path.node.arguments[0].value = compressKey(path.node.arguments[0].value, options.hashLength)
 
         processedNodes.add(path.node)
       },
 
-      JSXElement(path) {
+      JSXElement(path, state) {
+        const options = mergeDefaultOptions((state as { opts?: Partial<Options> }).opts)
+
         // istanbul ignore next
         if (processedNodes.has(path.node)) return
 
@@ -86,7 +91,7 @@ export default function nextI18nextCompressBabelPlugin(
         const keyAttribute = {
           type: 'JSXAttribute',
           name: { type: 'JSXIdentifier', name: 'i18nKey' },
-          value: { type: 'StringLiteral', value: compressKey(key, 6) },
+          value: { type: 'StringLiteral', value: compressKey(key, options.hashLength) },
         }
 
         // Strip the element of any existing `i18nKey` attribute and insert the new one

@@ -3,10 +3,11 @@ import { transformSync } from '@babel/core'
 // @ts-ignore Import JSX syntax support plugin
 import jsxSyntaxPlugin from '@babel/plugin-syntax-jsx'
 import babelPlugin from '../src/babel'
+import { Options } from '../src/options'
 
-function transform(input: string) {
+function transform(input: string, options?: Partial<Options>) {
   const output = transformSync(input, {
-    plugins: [jsxSyntaxPlugin, babelPlugin],
+    plugins: [jsxSyntaxPlugin, options ? [babelPlugin, options] : [babelPlugin]],
   })
 
   return output?.code
@@ -23,6 +24,17 @@ describe('babel', () => {
       `
 
       expect(transform(input)).toMatchSnapshot()
+    })
+
+    it('can configure the length of the compressed key', () => {
+      const input = `
+        export function ReactComponent() {
+          const { t } = useTranslation('namespace')
+          return <Input label={t('Email address')} />
+        }
+      `
+
+      expect(transform(input, { hashLength: 16 })).toMatchSnapshot()
     })
 
     it('ignores function calls with no arguments', () => {
@@ -95,6 +107,21 @@ describe('babel', () => {
       `
 
       expect(transform(input)).toMatchSnapshot()
+    })
+
+    it('can configure the length of the compressed key', () => {
+      const input = `
+        export function ReactComponent() {
+          const { t } = useTranslation('namespace')
+          return (
+            <Headline as='h1' size='xl' textAlign='center'>
+              <Trans t={t}>Forgot password</Trans>
+            </Headline>
+          )
+        }
+      `
+
+      expect(transform(input, { hashLength: 16 })).toMatchSnapshot()
     })
 
     it('ignores components with interpolated React components (1)', () => {

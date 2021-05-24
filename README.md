@@ -90,6 +90,25 @@ module.exports = {
 }
 ```
 
+## Configuration
+
+When configuring this package, make sure to pass the options to both the configuration in
+`next-i18next.config.js` as well as the babel plugin in `.babelrc`:
+
+```js
+// next-i18next.config.js
+...i18nextCompress({ hashLength: 8 }),
+
+// .babelrc
+"plugins": [["@devoxa/i18next-compress/babel", { "hashLength": 8 }]]
+```
+
+Available configuration options:
+
+- `hashLength` (optional, defaults to `6`): The length of the resulting compressed key. Low values
+  in combination with large locale files may cause collisions where two keys compress to the same
+  hash, which will throw an error during build.
+
 ## Limitations
 
 1. If React components are interpolated inside of `<Trans>`, the key is not compressed. **Do not

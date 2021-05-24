@@ -1,5 +1,16 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`babel \`<Trans>\` component can configure the length of the compressed key 1`] = `
+"export function ReactComponent() {
+  const {
+    t
+  } = useTranslation('namespace');
+  return <Headline as='h1' size='xl' textAlign='center'>
+              <Trans t={t} i18nKey=\\"bb42f8cd525dba08\\" />
+            </Headline>;
+}"
+`;
+
 exports[`babel \`<Trans>\` component correctly compresses the child text node as the key 1`] = `
 "export function ReactComponent() {
   const {
@@ -71,6 +82,15 @@ exports[`babel \`<Trans>\` component ignores components with interpolated React 
                 Forgot <Link>password</Link>
               </Trans>
             </Headline>;
+}"
+`;
+
+exports[`babel \`t\` function can configure the length of the compressed key 1`] = `
+"export function ReactComponent() {
+  const {
+    t
+  } = useTranslation('namespace');
+  return <Input label={t(\\"f2488fd4ef4adbc6\\")} />;
 }"
 `;
 
