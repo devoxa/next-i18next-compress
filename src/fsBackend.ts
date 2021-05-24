@@ -7,7 +7,7 @@ function parseLocaleFile(string: string) {
   const compressedJson: Record<string, string> = {}
 
   Object.keys(json).forEach((key) => {
-    const compressedKey = compressKey(key)
+    const compressedKey = compressKey(key, 6)
 
     // The compressed key already exists, throw a collision error
     if (compressedKeys[compressedKey]) {

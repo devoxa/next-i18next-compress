@@ -36,7 +36,7 @@ export default function nextI18nextCompressBabelPlugin(
         }
 
         // Compress the argument value (this is either the `i18nKey` or the natural key)
-        path.node.arguments[0].value = compressKey(path.node.arguments[0].value)
+        path.node.arguments[0].value = compressKey(path.node.arguments[0].value, 6)
 
         processedNodes.add(path.node)
       },
@@ -86,7 +86,7 @@ export default function nextI18nextCompressBabelPlugin(
         const keyAttribute = {
           type: 'JSXAttribute',
           name: { type: 'JSXIdentifier', name: 'i18nKey' },
-          value: { type: 'StringLiteral', value: compressKey(key) },
+          value: { type: 'StringLiteral', value: compressKey(key, 6) },
         }
 
         // Strip the element of any existing `i18nKey` attribute and insert the new one
