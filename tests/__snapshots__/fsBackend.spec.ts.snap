@@ -8,3 +8,5 @@ Object {
   "f2488f": "E-Mail Adresse",
 }
 `;
+
+exports[`fsBackend throws an error if there are any compression collisions 1`] = `"[next-i18next-compress] Compression collision detected: \\"Email address\\" and \\"Forgot password\\" compress to the same hash \\"foobar\\""`;
