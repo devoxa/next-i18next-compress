@@ -108,5 +108,5 @@ export default function nextI18nextCompressBabelPlugin(
 }
 
 function unsupportedPluginUsage(message: string) {
-  throw new Error('[next-i18next-compress] ' + message)
+  throw new Error('[next-i18next-compress] Unsupported usage detected: ' + message)
 }

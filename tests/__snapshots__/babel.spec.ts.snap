@@ -33,9 +33,9 @@ exports[`babel \`<Trans>\` component correctly compresses the i18nKey attribute 
 }"
 `;
 
-exports[`babel \`<Trans>\` component errors for components with variable i18nKey attribute 1`] = `"unknown: [next-i18next-compress] \`<Trans i18nKey={variable}>\` is not supported, has to be a string literal"`;
+exports[`babel \`<Trans>\` component errors for components with variable i18nKey attribute 1`] = `"unknown: [next-i18next-compress] Unsupported usage detected: \`<Trans i18nKey={variable}>\` is not supported, has to be a string literal"`;
 
-exports[`babel \`<Trans>\` component errors for components with variable spreads 1`] = `"unknown: [next-i18next-compress] \`<Trans {...variable}>\` is not supported"`;
+exports[`babel \`<Trans>\` component errors for components with variable spreads 1`] = `"unknown: [next-i18next-compress] Unsupported usage detected: \`<Trans {...variable}>\` is not supported"`;
 
 exports[`babel \`<Trans>\` component ignores components with interpolated React components (1) 1`] = `
 "export function ReactComponent() {
@@ -83,7 +83,7 @@ exports[`babel \`t\` function correctly compresses the argument as the key 1`] =
 }"
 `;
 
-exports[`babel \`t\` function errors for function calls with variable arguments 1`] = `"unknown: [next-i18next-compress] \`t(variable)\` is not supported, has to be a string literal"`;
+exports[`babel \`t\` function errors for function calls with variable arguments 1`] = `"unknown: [next-i18next-compress] Unsupported usage detected: \`t(variable)\` is not supported, has to be a string literal"`;
 
 exports[`babel \`t\` function ignores function calls with no arguments 1`] = `
 "export function ReactComponent() {
