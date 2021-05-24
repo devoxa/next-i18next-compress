@@ -37,6 +37,7 @@
   <a href="#why--how">Why & How</a> •
   <a href="#installation">Installation</a> •
   <a href="#limitations">Limitations</a> •
+  <a href="#troubleshooting">Troubleshooting</a> •
   <a href="#contributors">Contributors</a> •
   <a href="#license">License</a>
 </p>
@@ -140,6 +141,15 @@ Available configuration options:
 - <Trans {...variable}>
 + <Trans t={t}>
 ```
+
+## Troubleshooting
+
+**My text shows up as a hash like `1b7396`.**
+
+This means that the translation for the uncompressed key is missing from your locale files. It is
+recommended to use tools like [i18next-parser](https://github.com/i18next/i18next-parser) and
+[i18next-test](https://github.com/devoxa/i18next-test) to ensure that translations exist for all
+keys.
 
 ## Contributors
 
