@@ -5,6 +5,10 @@ export function parseLocaleFile(string: string, pOptions?: Options) {
   const options = mergeDefaultOptions(pOptions)
   const json = JSON.parse(string)
 
+  if (process.env.NODE_ENV === 'development') {
+    return json
+  }
+
   const compressedKeys: Record<string, string> = {}
   const compressedJson: Record<string, string> = {}
 

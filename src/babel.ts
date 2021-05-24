@@ -18,6 +18,10 @@ export default function nextI18nextCompressBabelPlugin(
 ): { name: string; visitor: Visitor } {
   const t = babel.types
 
+  if (process.env.NODE_ENV === 'development') {
+    return { name: 'next-i18next-compress', visitor: {} }
+  }
+
   return {
     name: 'next-i18next-compress',
 

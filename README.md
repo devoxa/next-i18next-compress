@@ -91,6 +91,9 @@ module.exports = {
 }
 ```
 
+4. You're done! The next time you run `next build`, your JavaScript bundle and locale files will be
+   smaller. (Keep in mind that the compression is not active during development.)
+
 ## Configuration
 
 When configuring this package, make sure to pass the options to both the configuration in
