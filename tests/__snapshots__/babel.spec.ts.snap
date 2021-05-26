@@ -58,6 +58,18 @@ exports[`babel \`<Trans>\` component correctly compresses components with interp
 }"
 `;
 
+exports[`babel \`<Trans>\` component correctly compresses components with interpolated variable 1`] = `
+"export function ReactComponent() {
+  const {
+    t
+  } = useTranslation('namespace');
+  const name = 'Sam';
+  return <Headline as='h1' size='xl' textAlign='center'>
+              <Trans t={t} i18nKey=\\"371405\\">~{name}~</Trans>
+            </Headline>;
+}"
+`;
+
 exports[`babel \`<Trans>\` component correctly compresses the child text node as the key 1`] = `
 "export function ReactComponent() {
   const {

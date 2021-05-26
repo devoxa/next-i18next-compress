@@ -193,6 +193,24 @@ describe('babel', () => {
       expect(transform(input)).toMatchSnapshot()
     })
 
+    it('correctly compresses components with interpolated variable', () => {
+      const input = `
+        export function ReactComponent() {
+          const { t } = useTranslation('namespace')
+          const name = 'Sam'
+          return (
+            <Headline as='h1' size='xl' textAlign='center'>
+              <Trans t={t}>
+                Happy birthday, {name}!
+              </Trans>
+            </Headline>
+          )
+        }
+      `
+
+      expect(transform(input)).toMatchSnapshot()
+    })
+
     it('errors for components with variable spreads', () => {
       const input = `
         export function ReactComponent() {
