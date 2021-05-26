@@ -118,13 +118,10 @@ Available configuration options:
 
 ## Limitations
 
-1. If React components are interpolated inside of `<Trans>`, the key is not compressed. **Do not
-   supply a `i18nKey` manually, this will cause a runtime error.**
-
-2. If a key includes a namespace (like `ns:key`), the namespace will get lost during compression.
+1. If a key includes a namespace (like `ns:key`), the namespace will get lost during compression.
    **This will cause a runtime error.** If you need this functionality, feel free to submit a PR!
 
-3. Calling `t` with a variable argument is not supported, use a string literal instead. This will
+2. Calling `t` with a variable argument is not supported, use a string literal instead. This will
    throw an error during build.
 
 ```diff
@@ -132,7 +129,7 @@ Available configuration options:
 + t('string literal')
 ```
 
-4. Calling `<Trans>` with a variable `i18nKey` attribute is not supported, use a string literal
+3. Calling `<Trans>` with a variable `i18nKey` attribute is not supported, use a string literal
    instead. This will throw an error during build.
 
 ```diff
@@ -140,7 +137,7 @@ Available configuration options:
 + <Trans i18nKey='string literal'>
 ```
 
-5. Calling `<Trans>` with spread attributes is not supported, use explicit attributes instead. This
+4. Calling `<Trans>` with spread attributes is not supported, use explicit attributes instead. This
    will throw an error during build.
 
 ```diff
@@ -150,7 +147,7 @@ Available configuration options:
 
 ## Troubleshooting
 
-**My text shows up as a hash like `1b7396`.**
+**My text shows up as a hash like `1b7396` or characters like `~~~`.**
 
 This means that the translation for the uncompressed key is missing from your locale files. It is
 recommended to use tools like [i18next-parser](https://github.com/i18next/i18next-parser) and
