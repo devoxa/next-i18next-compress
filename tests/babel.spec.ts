@@ -360,6 +360,12 @@ describe('babel', () => {
         `)
       ).toThrowErrorMatchingSnapshot()
     })
+
+    it('errors on unknown AST type', () => {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore Forcing an invalid AST type
+      expect(() => childrenToKey([{ type: 'Foobar' }])).toThrowErrorMatchingSnapshot()
+    })
   })
 
   it('does nothing if the file is in node_modules', () => {
