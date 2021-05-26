@@ -74,7 +74,7 @@ export default function nextI18nextCompressBabelPlugin(
         // istanbul ignore next
         if (processedNodes.has(path.node)) return
 
-        // Only handle JSX elements with the name `Trans` and either one text child or no children
+        // Only handle JSX elements with the name `Trans`
         if (!t.isJSXIdentifier(path.node.openingElement.name, { name: 'Trans' })) return
 
         // We don't support cases where a variable is spread into the attributes,
@@ -103,13 +103,13 @@ export default function nextI18nextCompressBabelPlugin(
         }
 
         // Get the key based on the children, if they exist
-        let childrenValue
+        let childrenKey
         if (path.node.children.length > 0) {
-          childrenValue = childrenToKey(path.node.children as BabelTypes.JSXElement['children'])
+          childrenKey = childrenToKey(path.node.children as BabelTypes.JSXElement['children'])
         }
 
         // The key is either the `i18nKey` attribute or the child text node
-        const key = (i18nKeyAttributeValue || childrenValue) as string
+        const key = (i18nKeyAttributeValue || childrenKey) as string
 
         // Generate the new `i18nKey` attribute with the compressed key
         const keyAttribute = {
@@ -170,7 +170,7 @@ export function childrenToKey(children: BabelTypes.JSXElement['children']): stri
       // Ignore trailing newlines
       text = text.replace(/\n *$/g, '')
 
-      // Turn leading newlines into spaces
+      // Turn remaining newlines into spaces
       text = text.replace(/\n */g, ' ')
 
       // Trim the start if we are the first child
@@ -188,13 +188,13 @@ export function childrenToKey(children: BabelTypes.JSXElement['children']): stri
     }
 
     if (child.type === 'JSXExpressionContainer') {
-      // Take expressions like `{'  '}` exactly as they are
+      // Take the value of string literal expressions like `{'  '}` as-is
       if (child.expression.type === 'StringLiteral') {
         key += child.expression.value
         continue
       }
 
-      // Handle interpolated variables by name
+      // Add markers for interpolated variables by name
       if (child.expression.type === 'Identifier') {
         key += `{${child.expression.name}}`
         continue
