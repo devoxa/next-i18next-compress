@@ -160,6 +160,23 @@ describe('babel', () => {
     })
 
     it('ignores components with interpolated React components (3)', () => {
+      const input = `
+        export function ReactComponent() {
+          const { t } = useTranslation('namespace')
+          return (
+            <Headline as='h1' size='xl' textAlign='center'>
+              <Trans t={t}>
+                <Link/> Forgot password
+              </Trans>
+            </Headline>
+          )
+        }
+      `
+
+      expect(transform(input)).toMatchSnapshot()
+    })
+
+    it('ignores components with interpolated React components (4)', () => {
       // TODO This is a bug right now, the i18nKey in the local file will get compressed,
       //      but the i18nKey in the JavaScript bundle is ignored. Fix this when we support
       //      compressing interpolated components!

@@ -78,6 +78,19 @@ exports[`babel \`<Trans>\` component ignores components with interpolated React 
     t
   } = useTranslation('namespace');
   return <Headline as='h1' size='xl' textAlign='center'>
+              <Trans t={t}>
+                <Link /> Forgot password
+              </Trans>
+            </Headline>;
+}"
+`;
+
+exports[`babel \`<Trans>\` component ignores components with interpolated React components (4) 1`] = `
+"export function ReactComponent() {
+  const {
+    t
+  } = useTranslation('namespace');
+  return <Headline as='h1' size='xl' textAlign='center'>
               <Trans t={t} i18nKey='Forgot password'>
                 Forgot <Link>password</Link>
               </Trans>
