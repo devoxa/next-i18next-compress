@@ -2,7 +2,7 @@
 
 exports[`parseLocaleFile can configure the length of the compressed key 1`] = `
 Object {
-  "Or <1>start your 30-day free trial</1>": "Oder <1>beginne deine 30-Tage kostenlose Probephase</1>",
+  "0d1f217dd077602b": "Oder <1>beginne deine 30-Tage kostenlose Probephase</1>",
   "bb42f8cd525dba08": "Passwort vergessen",
   "d9055ff096c25633": "Deine Anmeldedaten waren inkorrekt.",
   "f2488fd4ef4adbc6": "E-Mail Adresse",
@@ -11,7 +11,7 @@ Object {
 
 exports[`parseLocaleFile correctly compresses the keys of the locale file 1`] = `
 Object {
-  "Or <1>start your 30-day free trial</1>": "Oder <1>beginne deine 30-Tage kostenlose Probephase</1>",
+  "0d1f21": "Oder <1>beginne deine 30-Tage kostenlose Probephase</1>",
   "bb42f8": "Passwort vergessen",
   "d9055f": "Deine Anmeldedaten waren inkorrekt.",
   "f2488f": "E-Mail Adresse",

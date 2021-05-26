@@ -7,7 +7,7 @@ import { mergeDefaultOptions, Options } from './options'
 // which would cause us to compress the key twice.
 const processedNodes = new Set()
 
-interface Babel {
+export interface Babel {
   types: typeof BabelTypes
 }
 
@@ -74,10 +74,8 @@ export default function nextI18nextCompressBabelPlugin(
         // istanbul ignore next
         if (processedNodes.has(path.node)) return
 
-        // Only handle JSX elements with the name `Trans` and either one text child or no children
+        // Only handle JSX elements with the name `Trans`
         if (!t.isJSXIdentifier(path.node.openingElement.name, { name: 'Trans' })) return
-        if (path.node.children.length > 1) return
-        if (path.node.children.some((x) => x.type !== 'JSXText')) return
 
         // We don't support cases where a variable is spread into the attributes,
         // because there might be a `i18nKey` in it that we might overwrite.
@@ -104,14 +102,14 @@ export default function nextI18nextCompressBabelPlugin(
           i18nKeyAttributeValue = i18nKeyAttribute.value.value
         }
 
-        // Get the value of the child text node, if it exists
-        let childTextNodeValue
-        if (path.node.children[0] && path.node.children[0].type === 'JSXText') {
-          childTextNodeValue = path.node.children[0].value
+        // Get the key based on the children, if they exist
+        let childrenKey
+        if (path.node.children.length > 0) {
+          childrenKey = childrenToKey(path.node.children as BabelTypes.JSXElement['children'])
         }
 
         // The key is either the `i18nKey` attribute or the child text node
-        const key = (i18nKeyAttributeValue || childTextNodeValue) as string
+        const key = (i18nKeyAttributeValue || childrenKey) as string
 
         // Generate the new `i18nKey` attribute with the compressed key
         const keyAttribute = {
@@ -126,11 +124,23 @@ export default function nextI18nextCompressBabelPlugin(
         )
         path.node.openingElement.attributes.push(keyAttribute as any) // eslint-disable-line @typescript-eslint/no-explicit-any
 
-        // Strip the element of the children and the closing element, since they are
-        // now unused. `<Trans>Foo</Trans>` -> `<Trans i18nKey={...} />`
-        path.node.children = []
-        delete path.node.closingElement
-        path.node.openingElement.selfClosing = true
+        const canTurnIntoSelfClosing =
+          path.node.children.length === 0 ||
+          (path.node.children.length === 1 && path.node.children[0].type === 'JSXText')
+
+        if (canTurnIntoSelfClosing) {
+          // If there is no children or only one text child, turn it into a self-closing element
+          // with no children or additional closing element.
+          // `<Trans>Foo</Trans>` -> `<Trans i18nKey={...} />`
+          path.node.children = []
+          delete path.node.closingElement
+          path.node.openingElement.selfClosing = true
+        } else {
+          // If there is something else, at least compress the text nodes to single characters
+          // since they will be replaced by the translated text.
+          // `<Trans>Foo <Link>Bar</Link></Trans>` -> `<Trans i18nKey={...}>~<Link>~</Link></Trans>`
+          compressChildTextNodes(path.node.children as BabelTypes.JSXElement['children'])
+        }
 
         processedNodes.add(path.node)
       },
@@ -140,4 +150,98 @@ export default function nextI18nextCompressBabelPlugin(
 
 function unsupportedCodeUse(message: string) {
   throw new Error('[next-i18next-compress] Unsupported code use: ' + message)
+}
+
+export function childrenToKey(children: BabelTypes.JSXElement['children']): string {
+  let key = ''
+
+  // We ignore empty text nodes since they get stripped by React
+  children = children.filter((child) => {
+    if (child.type === 'JSXText' && child.value.trim() === '') return false
+    return true
+  })
+
+  for (let i = 0; i !== children.length; i++) {
+    const child = children[i]
+
+    if (child.type === 'JSXElement') {
+      key += `<${i}>` + childrenToKey(child.children) + `</${i}>`
+      continue
+    }
+
+    if (child.type === 'JSXText') {
+      let text = child.value
+
+      // Ignore trailing newlines
+      text = text.replace(/\n *$/g, '')
+
+      // Turn remaining newlines into spaces
+      text = text.replace(/\n */g, ' ')
+
+      // Trim the start if we are the first child
+      if (i === 0) {
+        text = text.trimStart()
+      }
+
+      // Trim the end if we are the last child
+      if (i === children.length - 1) {
+        text = text.trimEnd()
+      }
+
+      key += text
+      continue
+    }
+
+    if (child.type === 'JSXExpressionContainer') {
+      // Take the value of string literal expressions like `{'  '}` as-is
+      if (child.expression.type === 'StringLiteral') {
+        key += child.expression.value
+        continue
+      }
+
+      // Add markers for interpolated variables by name
+      if (child.expression.type === 'Identifier') {
+        key += `{${child.expression.name}}`
+        continue
+      }
+
+      // Ignore comments
+      if (child.expression.type === 'JSXEmptyExpression') {
+        continue
+      }
+
+      // We don't want to handle interpolated expressions. i18next-parser does, but it's a bit iffy
+      // to do (they take the entire source and then slice the expression out).
+      throw new Error('[next-i18next-compress] Unknown AST type: ' + child.expression.type)
+    }
+
+    if (child.type === 'JSXSpreadChild') {
+      unsupportedCodeUse('`<Trans>{...variable}</Trans>` is not supported (by NextJS)')
+    }
+
+    if (child.type === 'JSXFragment') {
+      unsupportedCodeUse('`<Trans>Text <>here</></Trans>` is not supported')
+    }
+
+    throw new Error('[next-i18next-compress] Unknown AST type: ' + child.type)
+  }
+
+  return key
+}
+
+function compressChildTextNodes(children: BabelTypes.JSXElement['children']): void {
+  for (let i = 0; i !== children.length; i++) {
+    const child = children[i]
+
+    if (child.type === 'JSXElement') {
+      compressChildTextNodes(child.children)
+      continue
+    }
+
+    // We ignore empty text nodes since they get stripped by React
+    if (child.type === 'JSXText' && child.value.trim() !== '') {
+      child.value = '~'
+      continue
+    }
+  }
 }
