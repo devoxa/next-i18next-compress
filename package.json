@@ -1,6 +1,7 @@
 {
   "name": "@devoxa/next-i18next-compress",
-  "version": "0.0.0",
+  "description": "Automatically compress locale keys for `next-i18next`",
+  "version": "1.0.0",
   "license": "MIT",
   "repository": {
     "url": "https://github.com/devoxa/next-i18next-compress"
@@ -18,6 +19,8 @@
   },
   "prettier": "@devoxa/prettier-config",
   "devDependencies": {
+    "@babel/core": "^7.14.3",
+    "@babel/plugin-syntax-jsx": "^7.12.13",
     "@babel/traverse": "^7.14.2",
     "@babel/types": "^7.14.2",
     "@devoxa/eslint-config": "^2.0.5",

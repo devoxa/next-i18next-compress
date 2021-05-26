@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`mergeDefaultOptions returns the custom options 1`] = `
+Object {
+  "hashLength": 16,
+}
+`;
+
+exports[`mergeDefaultOptions returns the default options 1`] = `
+Object {
+  "hashLength": 6,
+}
+`;
+
+exports[`mergeDefaultOptions throws an error on hashLength misconfiguration 1`] = `"[next-i18next-compress] Misconfiguration: The \\"hashLength\\" option has to be between 4 and 64."`;
+
+exports[`mergeDefaultOptions throws an error on hashLength misconfiguration 2`] = `"[next-i18next-compress] Misconfiguration: The \\"hashLength\\" option has to be between 4 and 64."`;

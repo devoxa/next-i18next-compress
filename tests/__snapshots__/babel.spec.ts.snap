@@ -1,0 +1,139 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`babel \`<Trans>\` component can configure the length of the compressed key 1`] = `
+"export function ReactComponent() {
+  const {
+    t
+  } = useTranslation('namespace');
+  return <Headline as='h1' size='xl' textAlign='center'>
+              <Trans t={t} i18nKey=\\"bb42f8cd525dba08\\" />
+            </Headline>;
+}"
+`;
+
+exports[`babel \`<Trans>\` component correctly compresses the child text node as the key 1`] = `
+"export function ReactComponent() {
+  const {
+    t
+  } = useTranslation('namespace');
+  return <Headline as='h1' size='xl' textAlign='center'>
+              <Trans t={t} i18nKey=\\"bb42f8\\" />
+            </Headline>;
+}"
+`;
+
+exports[`babel \`<Trans>\` component correctly compresses the i18nKey attribute as the key (1) 1`] = `
+"export function ReactComponent() {
+  const {
+    t
+  } = useTranslation('namespace');
+  return <Headline as='h1' size='xl' textAlign='center'>
+              <Trans t={t} i18nKey=\\"bb42f8\\" />
+            </Headline>;
+}"
+`;
+
+exports[`babel \`<Trans>\` component correctly compresses the i18nKey attribute as the key (2) 1`] = `
+"export function ReactComponent() {
+  const {
+    t
+  } = useTranslation('namespace');
+  return <Headline as='h1' size='xl' textAlign='center'>
+              <Trans t={t} i18nKey=\\"bb42f8\\" />
+            </Headline>;
+}"
+`;
+
+exports[`babel \`<Trans>\` component errors for components with variable i18nKey attribute 1`] = `"unknown: [next-i18next-compress] Unsupported code use: \`<Trans i18nKey={variable}>\` is not supported, use a string literal instead."`;
+
+exports[`babel \`<Trans>\` component errors for components with variable spreads 1`] = `"unknown: [next-i18next-compress] Unsupported code use: \`<Trans {...variable}>\` is not supported, use explicit attributes instead."`;
+
+exports[`babel \`<Trans>\` component ignores components with interpolated React components (1) 1`] = `
+"export function ReactComponent() {
+  const {
+    t
+  } = useTranslation('namespace');
+  return <Headline as='h1' size='xl' textAlign='center'>
+              <Trans t={t}><Link>Forgot password</Link></Trans>
+            </Headline>;
+}"
+`;
+
+exports[`babel \`<Trans>\` component ignores components with interpolated React components (2) 1`] = `
+"export function ReactComponent() {
+  const {
+    t
+  } = useTranslation('namespace');
+  return <Headline as='h1' size='xl' textAlign='center'>
+              <Trans t={t}>
+                Forgot <Link>password</Link>
+              </Trans>
+            </Headline>;
+}"
+`;
+
+exports[`babel \`<Trans>\` component ignores components with interpolated React components (3) 1`] = `
+"export function ReactComponent() {
+  const {
+    t
+  } = useTranslation('namespace');
+  return <Headline as='h1' size='xl' textAlign='center'>
+              <Trans t={t} i18nKey='Forgot password'>
+                Forgot <Link>password</Link>
+              </Trans>
+            </Headline>;
+}"
+`;
+
+exports[`babel \`t\` function can configure the length of the compressed key 1`] = `
+"export function ReactComponent() {
+  const {
+    t
+  } = useTranslation('namespace');
+  return <Input label={t(\\"f2488fd4ef4adbc6\\")} />;
+}"
+`;
+
+exports[`babel \`t\` function correctly compresses the argument as the key 1`] = `
+"export function ReactComponent() {
+  const {
+    t
+  } = useTranslation('namespace');
+  return <Input label={t(\\"f2488f\\")} />;
+}"
+`;
+
+exports[`babel \`t\` function errors for function calls with variable arguments 1`] = `"unknown: [next-i18next-compress] Unsupported code use: \`t(variable)\` is not supported, use a string literal instead."`;
+
+exports[`babel \`t\` function ignores function calls with no arguments 1`] = `
+"export function ReactComponent() {
+  const {
+    t
+  } = useTranslation('namespace');
+  return <Input label={t()} />;
+}"
+`;
+
+exports[`babel does nothing if running in development 1`] = `
+"export function ReactComponent() {
+  const {
+    t
+  } = useTranslation('namespace');
+  return <Box>
+            <Input label={t('Email address')} />
+            <Trans t={t}>Forgot password</Trans>
+          </Box>;
+}"
+`;
+
+exports[`babel does nothing if the file is in node_modules 1`] = `
+"export function ReactComponent() {
+  const {
+    t
+  } = useTranslation('namespace');
+  return <Box>
+            <Input label={t('Email address')} />
+            <Trans t={t}>Forgot password</Trans>
+          </Box>;
+}"
+`;

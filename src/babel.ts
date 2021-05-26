@@ -1,6 +1,7 @@
 import * as BabelTypes from '@babel/types'
 import { Visitor } from '@babel/traverse'
 import { compressKey } from './compressKey'
+import { mergeDefaultOptions, Options } from './options'
 
 // We keep a set of processed nodes, because Babel may traverse the same node twice,
 // which would cause us to compress the key twice.
@@ -9,6 +10,8 @@ const processedNodes = new Set()
 interface Babel {
   types: typeof BabelTypes
 }
+
+type State = { opts?: Partial<Options>; file: { opts: { filename?: string } } }
 
 export default function nextI18nextCompressBabelPlugin(
   babel: Babel
@@ -19,7 +22,22 @@ export default function nextI18nextCompressBabelPlugin(
     name: 'next-i18next-compress',
 
     visitor: {
-      CallExpression(path) {
+      CallExpression(path, _state) {
+        const state = _state as State
+
+        // Do not process any files in development
+        if (process.env.NODE_ENV === 'development') {
+          return
+        }
+
+        // Do not process any files in `node_modules/`, since this can cause issues with minified code
+        if (state.file.opts.filename && state.file.opts.filename.includes('/node_modules/')) {
+          return
+        }
+
+        const options = mergeDefaultOptions(state.opts)
+
+        // istanbul ignore next
         if (processedNodes.has(path.node)) return
 
         // Only handle functions with the name `t` and at least one argument
@@ -29,18 +47,31 @@ export default function nextI18nextCompressBabelPlugin(
         // We don't support cases where the argument is not a string, because
         // we can't figure out what the actual value is easily.
         if (path.node.arguments[0].type !== 'StringLiteral') {
-          return unsupportedPluginUsage(
-            '`t(variable)` is not supported, has to be a string literal'
-          )
+          return unsupportedCodeUse('`t(variable)` is not supported, use a string literal instead.')
         }
 
         // Compress the argument value (this is either the `i18nKey` or the natural key)
-        path.node.arguments[0].value = compressKey(path.node.arguments[0].value)
+        path.node.arguments[0].value = compressKey(path.node.arguments[0].value, options.hashLength)
 
         processedNodes.add(path.node)
       },
 
-      JSXElement(path) {
+      JSXElement(path, _state) {
+        const state = _state as State
+
+        // Do not process any files in development
+        if (process.env.NODE_ENV === 'development') {
+          return
+        }
+
+        // Do not process any files in `node_modules/`, since this can cause issues with minified code
+        if (state.file.opts.filename && state.file.opts.filename.includes('/node_modules/')) {
+          return
+        }
+
+        const options = mergeDefaultOptions(state.opts)
+
+        // istanbul ignore next
         if (processedNodes.has(path.node)) return
 
         // Only handle JSX elements with the name `Trans` and either one text child or no children
@@ -52,7 +83,9 @@ export default function nextI18nextCompressBabelPlugin(
         // because there might be a `i18nKey` in it that we might overwrite.
         const elementMixedAttributes = path.node.openingElement.attributes
         if (elementMixedAttributes.some((x) => x.type === 'JSXSpreadAttribute')) {
-          return unsupportedPluginUsage('`<Trans {...variable}>` is not supported')
+          return unsupportedCodeUse(
+            '`<Trans {...variable}>` is not supported, use explicit attributes instead.'
+          )
         }
         const elementJsxAttributes = elementMixedAttributes as Array<BabelTypes.JSXAttribute>
 
@@ -63,8 +96,8 @@ export default function nextI18nextCompressBabelPlugin(
           // We don't support cases where the attribute is not a string, because
           // we can't figure out what the actual value is easily.
           if (i18nKeyAttribute.value.type !== 'StringLiteral') {
-            return unsupportedPluginUsage(
-              '`<Trans i18nKey={variable}>` is not supported, has to be a string literal'
+            return unsupportedCodeUse(
+              '`<Trans i18nKey={variable}>` is not supported, use a string literal instead.'
             )
           }
 
@@ -84,7 +117,7 @@ export default function nextI18nextCompressBabelPlugin(
         const keyAttribute = {
           type: 'JSXAttribute',
           name: { type: 'JSXIdentifier', name: 'i18nKey' },
-          value: { type: 'StringLiteral', value: compressKey(key) },
+          value: { type: 'StringLiteral', value: compressKey(key, options.hashLength) },
         }
 
         // Strip the element of any existing `i18nKey` attribute and insert the new one
@@ -105,6 +138,6 @@ export default function nextI18nextCompressBabelPlugin(
   }
 }
 
-function unsupportedPluginUsage(message: string) {
-  throw new Error('[next-i18next-compress] ' + message)
+function unsupportedCodeUse(message: string) {
+  throw new Error('[next-i18next-compress] Unsupported code use: ' + message)
 }

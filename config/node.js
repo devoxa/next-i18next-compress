@@ -1,1 +1,5 @@
-module.exports = require('../dist/fsBackend.js').default
+const parseLocaleFile = require('../dist/src/parseLocaleFile.js').parseLocaleFile
+
+module.exports = (pOptions) => ({
+  backend: { parse: (string) => parseLocaleFile(string, pOptions) },
+})
