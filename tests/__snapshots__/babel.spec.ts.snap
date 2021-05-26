@@ -127,6 +127,12 @@ exports[`babel \`t\` function ignores function calls with no arguments 1`] = `
 }"
 `;
 
+exports[`babel childrenToKey errors on fragment 1`] = `"unknown: [next-i18next-compress] Unsupported code use: \`<Trans>Text <>here</></Trans>\` is not supported"`;
+
+exports[`babel childrenToKey errors on interpolated expression 1`] = `"unknown: [next-i18next-compress] Unsupported code use: \`<Trans>Text {function()}</Trans>\` is not supported"`;
+
+exports[`babel childrenToKey errors on spread children 1`] = `"unknown: [next-i18next-compress] Unsupported code use: \`<Trans>{...variable}</Trans>\` is not supported (by NextJS)"`;
+
 exports[`babel does nothing if running in development 1`] = `
 "export function ReactComponent() {
   const {

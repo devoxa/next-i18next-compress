@@ -254,7 +254,7 @@ describe('babel', () => {
       return key
     }
 
-    it('generates a key out of basic text', () => {
+    it('handles basic text', () => {
       const key = childrenToKeyFromJSX(`
         <Trans t={t}>
           Sign in to your account
@@ -264,7 +264,7 @@ describe('babel', () => {
       expect(key).toEqual('Sign in to your account')
     })
 
-    it('generates a key out of basic text and a comment', () => {
+    it('handles basic text and a comment', () => {
       const key = childrenToKeyFromJSX(`
         <Trans t={t}>
           Sign in to your account
@@ -275,7 +275,7 @@ describe('babel', () => {
       expect(key).toEqual('Sign in to your account')
     })
 
-    it('generates a key out of basic text and explicit whitespace', () => {
+    it('handles basic text and explicit whitespace', () => {
       const key = childrenToKeyFromJSX(`
         <Trans t={t}>
           Sign in to{'  '}your account{' '}
@@ -285,7 +285,7 @@ describe('babel', () => {
       expect(key).toEqual('Sign in to  your account ')
     })
 
-    it('generates a key out of basic text with stripped whitespace', () => {
+    it('handles basic text and stripped whitespace', () => {
       const key = childrenToKeyFromJSX(`
         <Trans t={t}>
           Lorem ipsum dolor sit amet,
@@ -294,6 +294,71 @@ describe('babel', () => {
       `)
 
       expect(key).toEqual('Lorem ipsum dolor sit amet, consectetur adipiscing elit.')
+    })
+
+    it('handles interpolated component', () => {
+      const key = childrenToKeyFromJSX(`
+        <Trans t={t}>
+          Or <NextLink href='/register'>start your 30-day free trial</NextLink>
+        </Trans>
+      `)
+
+      expect(key).toEqual('Or <1>start your 30-day free trial</1>')
+    })
+
+    it('handles multiple interpolated components', () => {
+      const key = childrenToKeyFromJSX(`
+        <Trans t={t}>
+          You have read and acknowledge the{' '}
+          <Link>Terms of Service</Link> and <Link>Privacy Notice</Link>.
+        </Trans>
+      `)
+
+      expect(key).toEqual(
+        'You have read and acknowledge the <2>Terms of Service</2> and <4>Privacy Notice</4>.'
+      )
+    })
+
+    it('handles self-closing interpolated component', () => {
+      const key = childrenToKeyFromJSX(`
+        <Trans t={t}>
+          <Iceberg /> There's something in the water.
+        </Trans>
+      `)
+
+      expect(key).toEqual("<0></0> There's something in the water.")
+    })
+
+    it('handles interpolated variable', () => {
+      const key = childrenToKeyFromJSX(`
+        <Trans t={t}>Welcome to {name}'s birthday party!</Trans>
+      `)
+
+      expect(key).toEqual("Welcome to {name}'s birthday party!")
+    })
+
+    it('errors on interpolated expression', () => {
+      expect(() =>
+        childrenToKeyFromJSX(`
+          <Trans t={t}>They do travel in herds: {array.join(', ')}</Trans>
+        `)
+      ).toThrowErrorMatchingSnapshot()
+    })
+
+    it('errors on spread children', () => {
+      expect(() =>
+        childrenToKeyFromJSX(`
+          <Trans>Foo {...variable} bar</Trans>
+        `)
+      ).toThrowErrorMatchingSnapshot()
+    })
+
+    it('errors on fragment', () => {
+      expect(() =>
+        childrenToKeyFromJSX(`
+          <Trans>Foo <>bar</></Trans>
+        `)
+      ).toThrowErrorMatchingSnapshot()
     })
   })
 
