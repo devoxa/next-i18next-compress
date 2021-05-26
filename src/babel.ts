@@ -145,6 +145,12 @@ function unsupportedCodeUse(message: string) {
 export function childrenToKey(children: BabelTypes.JSXElement['children']): string {
   let key = ''
 
+  // We ignore empty text nodes since they get stripped by React
+  children = children.filter((child) => {
+    if (child.type === 'JSXText' && child.value.trim() === '') return false
+    return true
+  })
+
   for (let i = 0; i !== children.length; i++) {
     const child = children[i]
 
@@ -154,17 +160,49 @@ export function childrenToKey(children: BabelTypes.JSXElement['children']): stri
     }
 
     if (child.type === 'JSXText') {
-      key += child.value.trim().replace(/\n */g, ' ')
+      let text = child.value
+
+      // Ignore trailing newlines
+      text = text.replace(/\n *$/g, '')
+
+      // Turn leading newlines into spaces
+      text = text.replace(/\n */g, ' ')
+
+      // Trim the start if we are the first child
+      if (i === 0) {
+        text = text.trimStart()
+      }
+
+      // Trim the end if we are the last child
+      if (i === children.length - 1) {
+        text = text.trimEnd()
+      }
+
+      key += text
       continue
     }
 
     if (child.type === 'JSXExpressionContainer') {
+      // Take expressions like `{'  '}` exactly as they are
       if (child.expression.type === 'StringLiteral') {
         key += child.expression.value
+        continue
       }
 
-      // Ignore other expressions, usually used for comments like `{/* this */}`
-      continue
+      // Handle interpolated variables by name
+      if (child.expression.type === 'Identifier') {
+        key += `{${child.expression.name}}`
+        continue
+      }
+
+      // Ignore comments
+      if (child.expression.type === 'JSXEmptyExpression') {
+        continue
+      }
+
+      // We don't want to handle interpolated expressions. i18next-parser does, but it's a bit iffy
+      // to do (they take the entire source and then slice the expression out).
+      throw new Error('[next-i18next-compress] Unknown AST type: ' + child.expression.type)
     }
 
     if (child.type === 'JSXSpreadChild') {
