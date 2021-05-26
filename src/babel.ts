@@ -7,7 +7,7 @@ import { mergeDefaultOptions, Options } from './options'
 // which would cause us to compress the key twice.
 const processedNodes = new Set()
 
-interface Babel {
+export interface Babel {
   types: typeof BabelTypes
 }
 

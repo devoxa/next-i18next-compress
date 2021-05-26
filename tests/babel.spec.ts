@@ -1,11 +1,11 @@
-import { transformSync } from '@babel/core'
+import { NodePath, transformSync } from '@babel/core'
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore Import JSX syntax support plugin
 import jsxSyntaxPlugin from '@babel/plugin-syntax-jsx'
 import { TransformOptions } from '@babel/core'
-import babelPlugin, { childrenToKey } from '../src/babel'
+import babelPlugin, { Babel, childrenToKey } from '../src/babel'
 import { Options } from '../src/options'
-import { JSXElement } from '@babel/types'
+import * as BabelTypes from '@babel/types'
 
 function transform(input: string, options?: Partial<Options>, babelOptions?: TransformOptions) {
   const output = transformSync(input, {
@@ -231,10 +231,48 @@ describe('babel', () => {
   })
 
   describe('childrenToKey', () => {
-    it('generates a key out of a text node', () => {
-      const children = [{ type: 'JSXText', value: 'Foobar' }] as JSXElement['children']
+    function childrenToKeyFromJSX(jsx: string) {
+      let key
 
-      expect(childrenToKey(children)).toEqual('Foobar')
+      function fakePlugin(babel: Babel) {
+        const t = babel.types
+
+        return {
+          visitor: {
+            JSXElement(path: NodePath<BabelTypes.JSXElement>) {
+              if (!t.isJSXIdentifier(path.node.openingElement.name, { name: 'Trans' })) return
+              key = childrenToKey(path.node.children)
+            },
+          },
+        }
+      }
+
+      transformSync(jsx, {
+        plugins: [jsxSyntaxPlugin, fakePlugin],
+      })
+
+      return key
+    }
+
+    it('generates a key out of basic text', () => {
+      const key = childrenToKeyFromJSX(`
+        <Trans t={t}>
+          Sign in to your account
+        </Trans>
+      `)
+
+      expect(key).toEqual('Sign in to your account')
+    })
+
+    it('generates a key out of basic text and a comment', () => {
+      const key = childrenToKeyFromJSX(`
+        <Trans t={t}>
+          Sign in to your account
+          {/* but with a hidden comment */}
+        </Trans>
+      `)
+
+      expect(key).toEqual('Sign in to your account')
     })
   })
 
