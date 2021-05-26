@@ -70,7 +70,7 @@ yarn add --dev @devoxa/next-i18next-compress
    and update your `next-i18next.config.js`:
 
 ```js
-const i18nextCompressConfig = require('@devoxa/next-i18next-compress/config')
+const nextI18nextCompressConfig = require('@devoxa/next-i18next-compress/config')
 
 module.exports = {
   // Your usual `next-i18next` configuration
@@ -81,7 +81,7 @@ module.exports = {
   serializeConfig: false,
 
   // Add the `next-i18next-compress` configuration
-  ...i18nextCompressConfig(),
+  ...nextI18nextCompressConfig(),
 }
 ```
 
@@ -104,7 +104,7 @@ When configuring this package, make sure to pass the options to both the configu
 
 ```js
 // next-i18next.config.js
-...i18nextCompress({ hashLength: 8 }),
+...nextI18nextCompressConfig({ hashLength: 8 }),
 
 // .babelrc
 "plugins": [["@devoxa/next-i18next-compress/babel", { "hashLength": 8 }]]
@@ -122,7 +122,7 @@ Available configuration options:
    supply a `i18nKey` manually, this will cause a runtime error.**
 
 2. If a key includes a namespace (like `ns:key`), the namespace will get lost during compression.
-   **This will cause a runtime error.** If you need this functionality, please submit a PR.
+   **This will cause a runtime error.** If you need this functionality, feel free to submit a PR!
 
 3. Calling `t` with a variable argument is not supported, use a string literal instead. This will
    throw an error during build.

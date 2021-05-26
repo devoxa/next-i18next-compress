@@ -18,4 +18,4 @@ Object {
 }
 `;
 
-exports[`parseLocaleFile throws an error if there are any compression collisions 1`] = `"[next-i18next-compress] Compression collision: \\"Email address\\" and \\"Forgot password\\" compress to the same hash \\"foobar\\".Try increasing the \\"hashLength\\" option or splitting your locale file into more namespaces."`;
+exports[`parseLocaleFile throws an error if there are any compression collisions 1`] = `"[next-i18next-compress] Compression collision: \\"Email address\\" and \\"Forgot password\\" compress to the same hash \\"foobar\\".Try increasing the \\"hashLength\\" option or splitting your locale file into multiple namespaces."`;

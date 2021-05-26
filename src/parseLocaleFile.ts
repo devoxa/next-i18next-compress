@@ -21,7 +21,7 @@ export function parseLocaleFile(string: string, pOptions?: Options) {
       const message =
         `[next-i18next-compress] Compression collision: ` +
         `"${compressedKeys[compressedKey]}" and "${key}" compress to the same hash "${compressedKey}".` +
-        `Try increasing the "hashLength" option or splitting your locale file into more namespaces.`
+        `Try increasing the "hashLength" option or splitting your locale file into multiple namespaces.`
 
       throw new Error(message)
     }
