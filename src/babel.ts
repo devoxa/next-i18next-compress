@@ -76,8 +76,6 @@ export default function nextI18nextCompressBabelPlugin(
 
         // Only handle JSX elements with the name `Trans` and either one text child or no children
         if (!t.isJSXIdentifier(path.node.openingElement.name, { name: 'Trans' })) return
-        if (path.node.children.length > 1) return
-        if (path.node.children.some((x) => x.type !== 'JSXText')) return
 
         // We don't support cases where a variable is spread into the attributes,
         // because there might be a `i18nKey` in it that we might overwrite.
@@ -126,11 +124,18 @@ export default function nextI18nextCompressBabelPlugin(
         )
         path.node.openingElement.attributes.push(keyAttribute as any) // eslint-disable-line @typescript-eslint/no-explicit-any
 
-        // Strip the element of the children and the closing element, since they are
-        // now unused. `<Trans>Foo</Trans>` -> `<Trans i18nKey={...} />`
-        path.node.children = []
-        delete path.node.closingElement
-        path.node.openingElement.selfClosing = true
+        if (path.node.children.length === 1 && path.node.children[0].type === 'JSXText') {
+          // If there is only one text child, strip it out and remove the closing element.
+          // `<Trans>Foo</Trans>` -> `<Trans i18nKey={...} />`
+          path.node.children = []
+          delete path.node.closingElement
+          path.node.openingElement.selfClosing = true
+        } else {
+          // If there is something else, at least compress the text nodes to single characters
+          // since they will be replaced by the translated text.
+          // `<Trans>Foo <Link>Bar</Link></Trans>` -> `<Trans i18nKey={...}>~<Link>~</Link></Trans>`
+          compressChildTextNodes(path.node.children as BabelTypes.JSXElement['children'])
+        }
 
         processedNodes.add(path.node)
       },
@@ -217,4 +222,21 @@ export function childrenToKey(children: BabelTypes.JSXElement['children']): stri
   }
 
   return key
+}
+
+function compressChildTextNodes(children: BabelTypes.JSXElement['children']): void {
+  for (let i = 0; i !== children.length; i++) {
+    const child = children[i]
+
+    if (child.type === 'JSXElement') {
+      compressChildTextNodes(child.children)
+      continue
+    }
+
+    // We ignore empty text nodes since they get stripped by React
+    if (child.type === 'JSXText' && child.value.trim() !== '') {
+      child.value = '~'
+      continue
+    }
+  }
 }
