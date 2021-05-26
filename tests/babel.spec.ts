@@ -3,8 +3,9 @@ import { transformSync } from '@babel/core'
 // @ts-ignore Import JSX syntax support plugin
 import jsxSyntaxPlugin from '@babel/plugin-syntax-jsx'
 import { TransformOptions } from '@babel/core'
-import babelPlugin from '../src/babel'
+import babelPlugin, { childrenToKey } from '../src/babel'
 import { Options } from '../src/options'
+import { JSXElement } from '@babel/types'
 
 function transform(input: string, options?: Partial<Options>, babelOptions?: TransformOptions) {
   const output = transformSync(input, {
@@ -209,6 +210,14 @@ describe('babel', () => {
       `
 
       expect(() => transform(input)).toThrowErrorMatchingSnapshot()
+    })
+  })
+
+  describe('childrenToKey', () => {
+    it('generates a key out of a text node', () => {
+      const children = [{ type: 'JSXText', value: 'Foobar' }] as JSXElement['children']
+
+      expect(childrenToKey(children)).toEqual('Foobar')
     })
   })
 

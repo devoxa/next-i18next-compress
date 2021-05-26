@@ -104,14 +104,14 @@ export default function nextI18nextCompressBabelPlugin(
           i18nKeyAttributeValue = i18nKeyAttribute.value.value
         }
 
-        // Get the value of the child text node, if it exists
-        let childTextNodeValue
-        if (path.node.children[0] && path.node.children[0].type === 'JSXText') {
-          childTextNodeValue = path.node.children[0].value
+        // Get the key based on the children, if they exist
+        let childrenValue
+        if (path.node.children.length > 0) {
+          childrenValue = childrenToKey(path.node.children as BabelTypes.JSXElement['children'])
         }
 
         // The key is either the `i18nKey` attribute or the child text node
-        const key = (i18nKeyAttributeValue || childTextNodeValue) as string
+        const key = (i18nKeyAttributeValue || childrenValue) as string
 
         // Generate the new `i18nKey` attribute with the compressed key
         const keyAttribute = {
@@ -140,4 +140,16 @@ export default function nextI18nextCompressBabelPlugin(
 
 function unsupportedCodeUse(message: string) {
   throw new Error('[next-i18next-compress] Unsupported code use: ' + message)
+}
+
+export function childrenToKey(children: BabelTypes.JSXElement['children']): string {
+  let key = ''
+
+  for (const child of children) {
+    if (child.type === 'JSXText') {
+      key += child.value
+    }
+  }
+
+  return key
 }
