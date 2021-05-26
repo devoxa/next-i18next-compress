@@ -154,12 +154,16 @@ export function childrenToKey(children: BabelTypes.JSXElement['children']): stri
     }
 
     if (child.type === 'JSXText') {
-      key += child.value
+      key += child.value.trim().replace(/\n */g, ' ')
       continue
     }
 
     if (child.type === 'JSXExpressionContainer') {
-      // Ignore, used for comments like `{/* this */}`
+      if (child.expression.type === 'StringLiteral') {
+        key += child.expression.value
+      }
+
+      // Ignore other expressions, usually used for comments like `{/* this */}`
       continue
     }
 
@@ -174,5 +178,5 @@ export function childrenToKey(children: BabelTypes.JSXElement['children']): stri
     throw new Error('[next-i18next-compress] Unknown AST type: ' + child.type)
   }
 
-  return key.trim()
+  return key
 }

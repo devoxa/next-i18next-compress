@@ -274,6 +274,27 @@ describe('babel', () => {
 
       expect(key).toEqual('Sign in to your account')
     })
+
+    it('generates a key out of basic text and explicit whitespace', () => {
+      const key = childrenToKeyFromJSX(`
+        <Trans t={t}>
+          Sign in to{'  '}your account{' '}
+        </Trans>
+      `)
+
+      expect(key).toEqual('Sign in to  your account ')
+    })
+
+    it('generates a key out of basic text with stripped whitespace', () => {
+      const key = childrenToKeyFromJSX(`
+        <Trans t={t}>
+          Lorem ipsum dolor sit amet,
+          consectetur adipiscing elit.
+        </Trans>
+      `)
+
+      expect(key).toEqual('Lorem ipsum dolor sit amet, consectetur adipiscing elit.')
+    })
   })
 
   it('does nothing if the file is in node_modules', () => {
