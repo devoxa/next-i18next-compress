@@ -124,8 +124,13 @@ export default function nextI18nextCompressBabelPlugin(
         )
         path.node.openingElement.attributes.push(keyAttribute as any) // eslint-disable-line @typescript-eslint/no-explicit-any
 
-        if (path.node.children.length === 1 && path.node.children[0].type === 'JSXText') {
-          // If there is only one text child, strip it out and remove the closing element.
+        const canTurnIntoSelfClosing =
+          path.node.children.length === 0 ||
+          (path.node.children.length === 1 && path.node.children[0].type === 'JSXText')
+
+        if (canTurnIntoSelfClosing) {
+          // If there is no children or only one text child, turn it into a self-closing element
+          // with no children or additional closing element.
           // `<Trans>Foo</Trans>` -> `<Trans i18nKey={...} />`
           path.node.children = []
           delete path.node.closingElement

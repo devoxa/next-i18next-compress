@@ -193,6 +193,22 @@ describe('babel', () => {
       expect(transform(input)).toMatchSnapshot()
     })
 
+    it('correctly compresses components with interpolated React components (5)', () => {
+      const input = `
+        export function ReactComponent() {
+          const { t } = useTranslation('namespace')
+          return (
+            <Headline as='h1' size='xl' textAlign='center'>
+              <Trans t={t} i18nKey='Forgot password' />
+              <Trans t={t} i18nKey='Forgot password'></Trans>
+            </Headline>
+          )
+        }
+      `
+
+      expect(transform(input)).toMatchSnapshot()
+    })
+
     it('correctly compresses components with interpolated variable', () => {
       const input = `
         export function ReactComponent() {
