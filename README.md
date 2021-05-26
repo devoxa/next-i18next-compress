@@ -65,10 +65,12 @@ using natural keys are about 50% of the gzipped locale file size.**
 yarn add --dev @devoxa/next-i18next-compress
 ```
 
-2. Update your `next-i18next.config.js`:
+2. Make sure `next-i18next` is
+   [setup to support unserializable plugins](https://github.com/isaachinman/next-i18next#unserialisable-configs)
+   and update your `next-i18next.config.js`:
 
 ```js
-const i18nextCompress = require('@devoxa/i18next-compress/config')
+const i18nextCompressConfig = require('@devoxa/i18next-compress/config')
 
 module.exports = {
   // Your usual `next-i18next` configuration
@@ -76,9 +78,10 @@ module.exports = {
     defaultLocale: 'en',
     locales: ['en', 'de'],
   },
+  serializeConfig: false,
 
   // Add the `next-i18next-compress` configuration
-  ...i18nextCompress(),
+  ...i18nextCompressConfig(),
 }
 ```
 
