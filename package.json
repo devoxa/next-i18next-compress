@@ -1,7 +1,7 @@
 {
   "name": "@devoxa/next-i18next-compress",
   "description": "Automatically compress locale keys for `next-i18next`",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "license": "MIT",
   "repository": {
     "url": "https://github.com/devoxa/next-i18next-compress"
