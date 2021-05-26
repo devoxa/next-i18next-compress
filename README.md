@@ -70,7 +70,7 @@ yarn add --dev @devoxa/next-i18next-compress
    and update your `next-i18next.config.js`:
 
 ```js
-const i18nextCompressConfig = require('@devoxa/i18next-compress/config')
+const i18nextCompressConfig = require('@devoxa/next-i18next-compress/config')
 
 module.exports = {
   // Your usual `next-i18next` configuration
@@ -90,7 +90,7 @@ module.exports = {
 ```json
 {
   "presets": ["next/babel"],
-  "plugins": ["@devoxa/i18next-compress/babel"]
+  "plugins": ["@devoxa/next-i18next-compress/babel"]
 }
 ```
 
@@ -107,7 +107,7 @@ When configuring this package, make sure to pass the options to both the configu
 ...i18nextCompress({ hashLength: 8 }),
 
 // .babelrc
-"plugins": [["@devoxa/i18next-compress/babel", { "hashLength": 8 }]]
+"plugins": [["@devoxa/next-i18next-compress/babel", { "hashLength": 8 }]]
 ```
 
 Available configuration options:
