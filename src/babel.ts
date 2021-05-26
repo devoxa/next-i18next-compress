@@ -145,11 +145,34 @@ function unsupportedCodeUse(message: string) {
 export function childrenToKey(children: BabelTypes.JSXElement['children']): string {
   let key = ''
 
-  for (const child of children) {
+  for (let i = 0; i !== children.length; i++) {
+    const child = children[i]
+
+    if (child.type === 'JSXElement') {
+      key += `<${i}>` + childrenToKey(child.children) + `</${i}>`
+      continue
+    }
+
     if (child.type === 'JSXText') {
       key += child.value
+      continue
     }
+
+    if (child.type === 'JSXExpressionContainer') {
+      // Ignore, used for comments like `{/* this */}`
+      continue
+    }
+
+    if (child.type === 'JSXSpreadChild') {
+      unsupportedCodeUse('`<Trans>{...variable}</Trans>` is not supported (by NextJS)')
+    }
+
+    if (child.type === 'JSXFragment') {
+      unsupportedCodeUse('`<Trans>Text <>here</></Trans>` is not supported')
+    }
+
+    throw new Error('[next-i18next-compress] Unknown AST type: ' + child.type)
   }
 
-  return key
+  return key.trim()
 }
