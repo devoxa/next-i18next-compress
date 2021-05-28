@@ -6,30 +6,35 @@ import * as BabelTypes from '@babel/types'
 import { astToKey } from '../src/astToKey'
 import { Babel } from '../src/babel'
 
-describe('astToKey (JSX)', () => {
-  function astToKeyFromCode(code: string) {
-    let key
+function astToKeyFromCode(code: string) {
+  let key
 
-    function fakePlugin(babel: Babel) {
-      const t = babel.types
+  function fakePlugin(babel: Babel) {
+    const t = babel.types
 
-      return {
-        visitor: {
-          JSXElement(path: NodePath<BabelTypes.JSXElement>) {
-            if (!t.isJSXIdentifier(path.node.openingElement.name, { name: 'Trans' })) return
-            key = astToKey(path.node.children, { code })
-          },
+    return {
+      visitor: {
+        CallExpression(path: NodePath<BabelTypes.CallExpression>) {
+          if (!t.isIdentifier(path.node.callee, { name: 't' })) return
+          key = astToKey([path.node.arguments[0]], { code })
         },
-      }
+
+        JSXElement(path: NodePath<BabelTypes.JSXElement>) {
+          if (!t.isJSXIdentifier(path.node.openingElement.name, { name: 'Trans' })) return
+          key = astToKey(path.node.children, { code })
+        },
+      },
     }
-
-    transformSync(code, {
-      plugins: [jsxSyntaxPlugin, fakePlugin],
-    })
-
-    return key
   }
 
+  transformSync(code, {
+    plugins: [jsxSyntaxPlugin, fakePlugin],
+  })
+
+  return key
+}
+
+describe('astToKey (JSX)', () => {
   it('handles basic text', () => {
     const key = astToKeyFromCode(`
       <Trans t={t}>
@@ -103,14 +108,6 @@ describe('astToKey (JSX)', () => {
     `)
 
     expect(key).toEqual("<0></0> There's something in the water.")
-  })
-
-  it.skip('handles interpolated variable', () => {
-    const key = astToKeyFromCode(`
-      <Trans t={t}>Welcome to {name}'s birthday party!</Trans>
-    `)
-
-    expect(key).toEqual("Welcome to {name}'s birthday party!")
   })
 
   it('errors on interpolated expression', () => {

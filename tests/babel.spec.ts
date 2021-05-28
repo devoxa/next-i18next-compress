@@ -16,7 +16,7 @@ function transform(input: string, options?: Partial<Options>, babelOptions?: Tra
 
 describe('babel', () => {
   describe('`t` function', () => {
-    it('correctly compresses the argument as the key (1)', () => {
+    it('correctly compresses the string literal argument as the key', () => {
       const input = `
         export function ReactComponent() {
           const { t } = useTranslation('namespace')
@@ -27,36 +27,13 @@ describe('babel', () => {
       expect(transform(input)).toMatchSnapshot()
     })
 
-    it('correctly compresses the argument as the key (2)', () => {
+    it('correctly compresses the template string argument as the key', () => {
       const input = `
         export function ReactComponent() {
           const { t } = useTranslation('namespace')
           return <Input label={t(\`Email address\`)} />
         }
       `
-
-      expect(transform(input)).toMatchSnapshot()
-    })
-
-    it.skip('correctly compresses the argument as the key (3)', () => {
-      const input = `
-        export function ReactComponent() {
-          const { t } = useTranslation('namespace')
-          const name = 'Sam'
-          return <Input label={t(\`Happy birthday, \${name}\`)} />
-        }
-      `
-
-      expect(transform(input)).toMatchSnapshot()
-    })
-
-    it.skip('correctly compresses the argument as the key (4)', () => {
-      const input = `
-        export function ReactComponent() {
-          const { t } = useTranslation('namespace')
-          return <Input label={t(\`Welcome to \${process.env.IP_CITY}!\`)} />
-        }
-        `
 
       expect(transform(input)).toMatchSnapshot()
     })
@@ -83,7 +60,7 @@ describe('babel', () => {
       expect(transform(input)).toMatchSnapshot()
     })
 
-    it('errors for function calls with variable arguments', () => {
+    it('errors for function calls with a variable as the argument', () => {
       const input = `
         export function ReactComponent() {
           const { t } = useTranslation('namespace')
@@ -95,7 +72,7 @@ describe('babel', () => {
       expect(() => transform(input)).toThrowErrorMatchingSnapshot()
     })
 
-    it('errors for function calls with member expressions', () => {
+    it('errors for function calls with a member expression as the argument', () => {
       const input = `
         export function ReactComponent() {
           const { t } = useTranslation('namespace')
@@ -123,7 +100,7 @@ describe('babel', () => {
       expect(transform(input)).toMatchSnapshot()
     })
 
-    it('correctly compresses the i18nKey attribute as the key (1)', () => {
+    it('correctly compresses the string literal i18nKey attribute as the key', () => {
       const input = `
         export function ReactComponent() {
           const { t } = useTranslation('namespace')
@@ -140,13 +117,14 @@ describe('babel', () => {
       expect(transform(input)).toMatchSnapshot()
     })
 
-    it('correctly compresses the i18nKey attribute as the key (2)', () => {
+    it('correctly compresses the string literal i18nKey attribute as the key without child nodes', () => {
       const input = `
         export function ReactComponent() {
           const { t } = useTranslation('namespace')
           return (
             <Headline as='h1' size='xl' textAlign='center'>
               <Trans t={t} i18nKey='Forgot password' />
+              <Trans t={t} i18nKey='Forgot password'></Trans>
             </Headline>
           )
         }
@@ -170,7 +148,7 @@ describe('babel', () => {
       expect(transform(input, { hashLength: 16 })).toMatchSnapshot()
     })
 
-    it('correctly compresses components with interpolated React components (1)', () => {
+    it('correctly compresses the interpolated React component (overarching)', () => {
       const input = `
         export function ReactComponent() {
           const { t } = useTranslation('namespace')
@@ -185,7 +163,7 @@ describe('babel', () => {
       expect(transform(input)).toMatchSnapshot()
     })
 
-    it('correctly compresses components with interpolated React components (2)', () => {
+    it('correctly compresses the interpolated React component (inline)', () => {
       const input = `
         export function ReactComponent() {
           const { t } = useTranslation('namespace')
@@ -202,7 +180,7 @@ describe('babel', () => {
       expect(transform(input)).toMatchSnapshot()
     })
 
-    it('correctly compresses components with interpolated React components (3)', () => {
+    it('correctly compresses the interpolated React component (self-closing)', () => {
       const input = `
         export function ReactComponent() {
           const { t } = useTranslation('namespace')
@@ -219,7 +197,7 @@ describe('babel', () => {
       expect(transform(input)).toMatchSnapshot()
     })
 
-    it('correctly compresses components with interpolated React components (4)', () => {
+    it('correctly compresses the string literal i18nKey attribute as the key with interpolated child nodes', () => {
       const input = `
         export function ReactComponent() {
           const { t } = useTranslation('namespace')
@@ -227,57 +205,6 @@ describe('babel', () => {
             <Headline as='h1' size='xl' textAlign='center'>
               <Trans t={t} i18nKey='Forgot password'>
                 Forgot <Link>password</Link>
-              </Trans>
-            </Headline>
-          )
-        }
-      `
-
-      expect(transform(input)).toMatchSnapshot()
-    })
-
-    it('correctly compresses components with interpolated React components (5)', () => {
-      const input = `
-        export function ReactComponent() {
-          const { t } = useTranslation('namespace')
-          return (
-            <Headline as='h1' size='xl' textAlign='center'>
-              <Trans t={t} i18nKey='Forgot password' />
-              <Trans t={t} i18nKey='Forgot password'></Trans>
-            </Headline>
-          )
-        }
-      `
-
-      expect(transform(input)).toMatchSnapshot()
-    })
-
-    it.skip('correctly compresses components with interpolated variable', () => {
-      const input = `
-        export function ReactComponent() {
-          const { t } = useTranslation('namespace')
-          const name = 'Sam'
-          return (
-            <Headline as='h1' size='xl' textAlign='center'>
-              <Trans t={t}>
-                Happy birthday, {name}!
-              </Trans>
-            </Headline>
-          )
-        }
-      `
-
-      expect(transform(input)).toMatchSnapshot()
-    })
-
-    it.skip('correctly compresses components with interpolated member expression', () => {
-      const input = `
-        export function ReactComponent() {
-          const { t } = useTranslation('namespace')
-          return (
-            <Headline as='h1' size='xl' textAlign='center'>
-              <Trans t={t}>
-                Welcome to {process.env.IP_CITY}!
               </Trans>
             </Headline>
           )
@@ -303,7 +230,7 @@ describe('babel', () => {
       expect(() => transform(input)).toThrowErrorMatchingSnapshot()
     })
 
-    it('errors for components with variable i18nKey attribute', () => {
+    it('errors for components with a variable as the i18nKey attribute', () => {
       const input = `
         export function ReactComponent() {
           const { t } = useTranslation('namespace')

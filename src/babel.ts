@@ -48,6 +48,7 @@ export default function nextI18nextCompressBabelPlugin(
         if (!t.isIdentifier(path.node.callee, { name: 't' })) return
         if (path.node.arguments.length === 0) return
 
+        // Get the key from the AST of the first argument
         const key = astToKey([path.node.arguments[0]] as AbstractSyntaxTree, {
           code: state.file.code,
         })
@@ -141,7 +142,7 @@ export default function nextI18nextCompressBabelPlugin(
         if (canTurnIntoSelfClosing) {
           // If there is no children or only one text child, turn it into a self-closing element
           // with no children or additional closing element.
-          // `<Trans>Foo</Trans>` -> `<Trans i18nKey={...} />`
+          // `<Trans>Foo</Trans>` -> `<Trans i18nKey='...' />`
           path.node.children = []
           delete path.node.closingElement
           path.node.openingElement.selfClosing = true

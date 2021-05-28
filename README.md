@@ -120,30 +120,8 @@ Available configuration options:
 
 1. If a key includes a namespace (like `ns:key`), the namespace will get lost during compression.
    **This will cause a runtime error.** If you need this functionality, feel free to submit a PR!
-
-2. Calling `t` with a variable argument is not supported, use a string literal instead. This will
-   throw an error during build.
-
-```diff
-- t(variable)
-+ t('string literal')
-```
-
-3. Calling `<Trans>` with a variable `i18nKey` attribute is not supported, use a string literal
-   instead. This will throw an error during build.
-
-```diff
-- <Trans i18nKey={variable}>
-+ <Trans i18nKey='string literal'>
-```
-
-4. Calling `<Trans>` with spread attributes is not supported, use explicit attributes instead. This
-   will throw an error during build.
-
-```diff
-- <Trans {...variable}>
-+ <Trans t={t}>
-```
+2. Some syntax variants are not supported (for example calling `t` with a variable as the argument),
+   which will throw an error during build.
 
 ## Troubleshooting
 

@@ -47,10 +47,9 @@ export function astToKey(ast: AbstractSyntaxTree, pOptions: AstToKeyOptions): st
 
       // istanbul ignore next
       if (childNodes.some((childNode) => !childNode.start || !childNode.end)) {
-        throw new Error('Start and end of AST node are missing, please file a bug report!')
+        throw new Error('Start or end of a AST node are missing, please file a bug report!')
       }
 
-      childNodes.sort((a, b) => (a.start as number) - (b.start as number))
       key += astToKey(childNodes, { ...options, level: options.level + 1 })
       continue
     }
@@ -61,31 +60,8 @@ export function astToKey(ast: AbstractSyntaxTree, pOptions: AstToKeyOptions): st
       continue
     }
 
-    // This is an interpolated variable, like `Foo ${bar}`. We do not allow this on the top level
-    // to prevent calls like `t(bar)` which we can't do anything with.
-    // if (options.level > 0 && astNode.type === 'Identifier') {
-    //   key += `{${astNode.name}}`
-    //   continue
-    // }
-
-    // This is an interpolated member expression, like `Foo ${bar.baz.boz}`. We do not allow this
-    // on the top level to prevent calls like `t(bar.baz)` which we can't do anything with.
-    // if (options.level > 0 && astNode.type === 'MemberExpression') {
-    //   // istanbul ignore next
-    //   if (!astNode.start || !astNode.end) {
-    //     throw new Error('Start and end of AST node are missing, please file a bug report!')
-    //   }
-
-    //   // We slice the code out of the file instead of trying to recreate it from the AST
-    //   // because I value my continued sanity.
-    //   const astNodeCode = options.code.slice(astNode.start, astNode.end)
-
-    //   key += `{${astNodeCode}}`
-    //   continue
-    // }
-
     // This is text inside of a JSX component. It may have whitespace, which is ignored
-    // by React, so we have to clean it up to match.
+    // by React, so we have to clean it up to match what is expected.
     if (astNode.type === 'JSXText') {
       let value = astNode.value
 
@@ -100,9 +76,9 @@ export function astToKey(ast: AbstractSyntaxTree, pOptions: AstToKeyOptions): st
 
     // This is a JSX component, like `<Trans><Foo>...</Foo></Trans>`
     if (astNode.type === 'JSXElement') {
-      const childrenKey = astToKey(astNode.children, { ...options, level: options.level + 1 })
+      const childNodesKey = astToKey(astNode.children, { ...options, level: options.level + 1 })
 
-      key += `<${i}>${childrenKey}</${i}>`
+      key += `<${i}>${childNodesKey}</${i}>`
       continue
     }
 
@@ -117,7 +93,11 @@ export function astToKey(ast: AbstractSyntaxTree, pOptions: AstToKeyOptions): st
       continue
     }
 
-    // Deliberately do not handle the following types:
+    // We still have to add support for the following types:
+    // - Identifier
+    // - MemberExpression
+
+    // We deliberately do not handle the following types:
     // - JSXSpreadChild is not supported by React/NextJS
     // - CallExpression is not supported `i18next`
     // - JSXFragment is not supported by `i18next`

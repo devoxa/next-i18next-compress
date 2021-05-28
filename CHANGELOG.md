@@ -2,7 +2,7 @@
 
 **Features**
 
-- Support compressing `<Trans>` with interpolated variables & React components
+- Support compressing `<Trans>` with interpolated React components
 
 # 1.0.0
 
