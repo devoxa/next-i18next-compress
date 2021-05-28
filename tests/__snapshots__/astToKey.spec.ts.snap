@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`astToKey (JSX) errors on fragment 1`] = `"unknown: [next-i18next-compress] Unknown AST type: JSXFragment"`;
+
+exports[`astToKey (JSX) errors on interpolated expression 1`] = `"unknown: [next-i18next-compress] Unknown AST type: CallExpression"`;
+
+exports[`astToKey (JSX) errors on spread children 1`] = `"unknown: [next-i18next-compress] Unknown AST type: JSXSpreadChild"`;
+
+exports[`astToKey (JSX) errors on unknown AST type 1`] = `"[next-i18next-compress] Unknown AST type: Foobar"`;

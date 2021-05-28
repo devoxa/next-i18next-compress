@@ -189,14 +189,6 @@ exports[`babel \`t\` function ignores function calls with no arguments 1`] = `
 }"
 `;
 
-exports[`babel astToKey errors on fragment 1`] = `"unknown: [next-i18next-compress] Unknown AST type: JSXFragment"`;
-
-exports[`babel astToKey errors on interpolated expression 1`] = `"unknown: [next-i18next-compress] Unknown AST type: CallExpression"`;
-
-exports[`babel astToKey errors on spread children 1`] = `"unknown: [next-i18next-compress] Unknown AST type: JSXSpreadChild"`;
-
-exports[`babel astToKey errors on unknown AST type 1`] = `"[next-i18next-compress] Unknown AST type: Foobar"`;
-
 exports[`babel does nothing if running in development 1`] = `
 "export function ReactComponent() {
   const {

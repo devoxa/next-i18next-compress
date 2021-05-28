@@ -1,0 +1,145 @@
+import { NodePath, transformSync } from '@babel/core'
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore Import JSX syntax support plugin
+import jsxSyntaxPlugin from '@babel/plugin-syntax-jsx'
+import * as BabelTypes from '@babel/types'
+import { astToKey } from '../src/astToKey'
+import { Babel } from '../src/babel'
+
+describe('astToKey (JSX)', () => {
+  function astToKeyFromCode(code: string) {
+    let key
+
+    function fakePlugin(babel: Babel) {
+      const t = babel.types
+
+      return {
+        visitor: {
+          JSXElement(path: NodePath<BabelTypes.JSXElement>) {
+            if (!t.isJSXIdentifier(path.node.openingElement.name, { name: 'Trans' })) return
+            key = astToKey(path.node.children, { code })
+          },
+        },
+      }
+    }
+
+    transformSync(code, {
+      plugins: [jsxSyntaxPlugin, fakePlugin],
+    })
+
+    return key
+  }
+
+  it('handles basic text', () => {
+    const key = astToKeyFromCode(`
+      <Trans t={t}>
+        Sign in to your account
+      </Trans>
+    `)
+
+    expect(key).toEqual('Sign in to your account')
+  })
+
+  it('handles basic text and a comment', () => {
+    const key = astToKeyFromCode(`
+      <Trans t={t}>
+        Sign in to your account
+        {/* but with a hidden comment */}
+      </Trans>
+    `)
+
+    expect(key).toEqual('Sign in to your account')
+  })
+
+  it('handles basic text and explicit whitespace', () => {
+    const key = astToKeyFromCode(`
+      <Trans t={t}>
+        Sign in to{'  '}your account{' '}
+      </Trans>
+    `)
+
+    expect(key).toEqual('Sign in to  your account ')
+  })
+
+  it('handles basic text and stripped whitespace', () => {
+    const key = astToKeyFromCode(`
+      <Trans t={t}>
+        Lorem ipsum dolor sit amet,
+        consectetur adipiscing elit.
+      </Trans>
+    `)
+
+    expect(key).toEqual('Lorem ipsum dolor sit amet, consectetur adipiscing elit.')
+  })
+
+  it('handles interpolated component', () => {
+    const key = astToKeyFromCode(`
+      <Trans t={t}>
+        Or <NextLink href='/register'>start your 30-day free trial</NextLink>
+      </Trans>
+    `)
+
+    expect(key).toEqual('Or <1>start your 30-day free trial</1>')
+  })
+
+  it('handles multiple interpolated components', () => {
+    const key = astToKeyFromCode(`
+      <Trans t={t}>
+        You have read and acknowledge the{' '}
+        <Link>Terms of Service</Link> and <Link>Privacy Notice</Link>.
+      </Trans>
+    `)
+
+    expect(key).toEqual(
+      'You have read and acknowledge the <2>Terms of Service</2> and <4>Privacy Notice</4>.'
+    )
+  })
+
+  it('handles self-closing interpolated component', () => {
+    const key = astToKeyFromCode(`
+      <Trans t={t}>
+        <Iceberg /> There's something in the water.
+      </Trans>
+    `)
+
+    expect(key).toEqual("<0></0> There's something in the water.")
+  })
+
+  it('handles interpolated variable', () => {
+    const key = astToKeyFromCode(`
+      <Trans t={t}>Welcome to {name}'s birthday party!</Trans>
+    `)
+
+    expect(key).toEqual("Welcome to {name}'s birthday party!")
+  })
+
+  it('errors on interpolated expression', () => {
+    expect(() =>
+      astToKeyFromCode(`
+        <Trans t={t}>They do travel in herds: {array.join(', ')}</Trans>
+      `)
+    ).toThrowErrorMatchingSnapshot()
+  })
+
+  it('errors on spread children', () => {
+    expect(() =>
+      astToKeyFromCode(`
+        <Trans>Foo {...variable} bar</Trans>
+      `)
+    ).toThrowErrorMatchingSnapshot()
+  })
+
+  it('errors on fragment', () => {
+    expect(() =>
+      astToKeyFromCode(`
+        <Trans>Foo <>bar</></Trans>
+      `)
+    ).toThrowErrorMatchingSnapshot()
+  })
+
+  it('errors on unknown AST type', () => {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore Forcing an invalid AST type
+    expect(() => astToKey([{ type: 'Foobar' }])).toThrowErrorMatchingSnapshot()
+  })
+})
