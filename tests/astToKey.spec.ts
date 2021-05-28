@@ -30,7 +30,7 @@ function astToKeyFromCode(code: string) {
   transformSync(code, {
     plugins: [jsxSyntaxPlugin, fakePlugin],
     filename: 'client/src/test.jsx',
-    cwd: '/tests/'
+    cwd: '/tests/',
   })
 
   return key
