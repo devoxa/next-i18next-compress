@@ -18,7 +18,7 @@ function transform(input: string, options?: Partial<Options>, babelOptions?: Tra
 
 describe('babel', () => {
   describe('`t` function', () => {
-    it('correctly compresses the argument as the key', () => {
+    it('correctly compresses the argument as the key (1)', () => {
       const input = `
         export function ReactComponent() {
           const { t } = useTranslation('namespace')
@@ -29,6 +29,28 @@ describe('babel', () => {
       expect(transform(input)).toMatchSnapshot()
     })
 
+    it('correctly compresses the argument as the key (2)', () => {
+      const input = `
+        export function ReactComponent() {
+          const { t } = useTranslation('namespace')
+          return <Input label={t(\`Email address\`)} />
+        }
+      `
+
+      expect(transform(input)).toMatchSnapshot()
+    })
+
+    it('correctly compresses the argument as the key (3)', () => {
+      const input = `
+        export function ReactComponent() {
+          const { t } = useTranslation('namespace')
+          const name = 'Sam'
+          return <Input label={t(\`Happy birthday, \${name}\`)} />
+        }
+      `
+
+      expect(transform(input)).toMatchSnapshot()
+    })
     it('can configure the length of the compressed key', () => {
       const input = `
         export function ReactComponent() {

@@ -128,12 +128,31 @@ exports[`babel \`t\` function can configure the length of the compressed key 1`]
 }"
 `;
 
-exports[`babel \`t\` function correctly compresses the argument as the key 1`] = `
+exports[`babel \`t\` function correctly compresses the argument as the key (1) 1`] = `
 "export function ReactComponent() {
   const {
     t
   } = useTranslation('namespace');
   return <Input label={t(\\"f2488f\\")} />;
+}"
+`;
+
+exports[`babel \`t\` function correctly compresses the argument as the key (2) 1`] = `
+"export function ReactComponent() {
+  const {
+    t
+  } = useTranslation('namespace');
+  return <Input label={t(\\"f2488f\\")} />;
+}"
+`;
+
+exports[`babel \`t\` function correctly compresses the argument as the key (3) 1`] = `
+"export function ReactComponent() {
+  const {
+    t
+  } = useTranslation('namespace');
+  const name = 'Sam';
+  return <Input label={t(\\"1d49fa\\")} />;
 }"
 `;
 
