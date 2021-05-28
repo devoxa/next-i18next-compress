@@ -102,14 +102,27 @@ export function astToKey(ast: AbstractSyntaxTree, pOptions: AstToKeyOptions): st
     // - CallExpression is not supported `i18next`
     // - JSXFragment is not supported by `i18next`
 
-    throw new UnsupportedAstTypeError(astNode.type)
+    throw new UnsupportedAstTypeError(astNode, options.code)
   }
 
   return key
 }
 
-class UnsupportedAstTypeError extends Error {
-  constructor(type: string) {
-    super('[next-i18next-compress] Unknown AST type: ' + type)
+export class UnsupportedAstTypeError extends Error {
+  constructor(astNode: { type: string; start: number | null; end: number | null }, code: string) {
+    let message =
+      `[next-i18next-compress] Unsupported AST type: ` +
+      `We do not know how to handle "${astNode.type}"`
+
+    if (code && astNode.start && astNode.end) {
+      const start = Math.max(0, astNode.start - 30)
+      const end = Math.min(code.length, astNode.end + 30)
+
+      message += ` in this part of your code:\n` + code.slice(start, end)
+    } else {
+      message += '.'
+    }
+
+    super(message)
   }
 }

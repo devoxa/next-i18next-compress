@@ -2,7 +2,7 @@ import * as BabelTypes from '@babel/types'
 import { Visitor } from '@babel/traverse'
 import { compressKey } from './compressKey'
 import { mergeDefaultOptions, Options } from './options'
-import { AbstractSyntaxTree, astToKey } from './astToKey'
+import { AbstractSyntaxTree, astToKey, UnsupportedAstTypeError } from './astToKey'
 
 // We keep a set of processed nodes, because Babel may traverse the same node twice,
 // which would cause us to compress the key twice.
@@ -89,10 +89,9 @@ export default function nextI18nextCompressBabelPlugin(
         // We don't support cases where a variable is spread into the attributes,
         // because there might be a `i18nKey` in it that we might overwrite.
         const elementMixedAttributes = path.node.openingElement.attributes
-        if (elementMixedAttributes.some((x) => x.type === 'JSXSpreadAttribute')) {
-          return unsupportedCodeUse(
-            '`<Trans {...variable}>` is not supported, use explicit attributes instead.'
-          )
+        const spreadAttribute = elementMixedAttributes.find((x) => x.type === 'JSXSpreadAttribute')
+        if (spreadAttribute) {
+          throw new UnsupportedAstTypeError(spreadAttribute, state.file.code)
         }
         const elementJsxAttributes = elementMixedAttributes as Array<BabelTypes.JSXAttribute>
 
@@ -103,9 +102,7 @@ export default function nextI18nextCompressBabelPlugin(
           // We don't support cases where the attribute is not a string, because
           // we can't figure out what the actual value is easily.
           if (i18nKeyAttribute.value.type !== 'StringLiteral') {
-            return unsupportedCodeUse(
-              '`<Trans i18nKey={variable}>` is not supported, use a string literal instead.'
-            )
+            throw new UnsupportedAstTypeError(i18nKeyAttribute.value, state.file.code)
           }
 
           i18nKeyAttributeValue = i18nKeyAttribute.value.value
@@ -157,10 +154,6 @@ export default function nextI18nextCompressBabelPlugin(
       },
     },
   }
-}
-
-function unsupportedCodeUse(message: string) {
-  throw new Error('[next-i18next-compress] Unsupported code use: ' + message)
 }
 
 function compressChildTextNodes(children: BabelTypes.JSXElement['children']): void {

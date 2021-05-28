@@ -1,9 +1,23 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`astToKey (JSX) errors on fragment 1`] = `"unknown: [next-i18next-compress] Unknown AST type: JSXFragment"`;
+exports[`astToKey (JSX) errors on fragment 1`] = `
+"/tests/client/src/test.jsx: [next-i18next-compress] Unsupported AST type: We do not know how to handle \\"JSXFragment\\" in this part of your code:
 
-exports[`astToKey (JSX) errors on interpolated expression 1`] = `"unknown: [next-i18next-compress] Unknown AST type: CallExpression"`;
+        <Trans>Foo <>bar</></Trans>
+      "
+`;
 
-exports[`astToKey (JSX) errors on spread children 1`] = `"unknown: [next-i18next-compress] Unknown AST type: JSXSpreadChild"`;
+exports[`astToKey (JSX) errors on interpolated expression 1`] = `
+"/tests/client/src/test.jsx: [next-i18next-compress] Unsupported AST type: We do not know how to handle \\"CallExpression\\" in this part of your code:
+{t}>They do travel in herds: {array.join(', ')}</Trans>
+      "
+`;
 
-exports[`astToKey (JSX) errors on unknown AST type 1`] = `"[next-i18next-compress] Unknown AST type: Foobar"`;
+exports[`astToKey (JSX) errors on spread children 1`] = `
+"/tests/client/src/test.jsx: [next-i18next-compress] Unsupported AST type: We do not know how to handle \\"JSXSpreadChild\\" in this part of your code:
+
+        <Trans>Foo {...variable} bar</Trans>
+      "
+`;
+
+exports[`astToKey (JSX) errors on unknown AST type 1`] = `"[next-i18next-compress] Unsupported AST type: We do not know how to handle \\"Foobar\\"."`;

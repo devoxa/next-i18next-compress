@@ -92,9 +92,20 @@ exports[`babel \`<Trans>\` component correctly compresses the string literal i18
 }"
 `;
 
-exports[`babel \`<Trans>\` component errors for components with a variable as the i18nKey attribute 1`] = `"unknown: [next-i18next-compress] Unsupported code use: \`<Trans i18nKey={variable}>\` is not supported, use a string literal instead."`;
+exports[`babel \`<Trans>\` component errors for components with a variable as the i18nKey attribute 1`] = `
+"/tests/client/src/test.jsx: [next-i18next-compress] Unsupported AST type: We do not know how to handle \\"JSXExpressionContainer\\" in this part of your code:
+         <Trans t={t} i18nKey={variable} />
+            </Headline>
+  "
+`;
 
-exports[`babel \`<Trans>\` component errors for components with variable spreads 1`] = `"unknown: [next-i18next-compress] Unsupported code use: \`<Trans {...variable}>\` is not supported, use explicit attributes instead."`;
+exports[`babel \`<Trans>\` component errors for components with variable spreads 1`] = `
+"/tests/client/src/test.jsx: [next-i18next-compress] Unsupported AST type: We do not know how to handle \\"JSXSpreadAttribute\\" in this part of your code:
+'>
+              <Trans t={t} {...variable} />
+            </Headline>
+  "
+`;
 
 exports[`babel \`t\` function can configure the length of the compressed key 1`] = `
 "export function ReactComponent() {
@@ -123,9 +134,19 @@ exports[`babel \`t\` function correctly compresses the template string argument 
 }"
 `;
 
-exports[`babel \`t\` function errors for function calls with a member expression as the argument 1`] = `"unknown: [next-i18next-compress] Unknown AST type: MemberExpression"`;
+exports[`babel \`t\` function errors for function calls with a member expression as the argument 1`] = `
+"/tests/client/src/test.jsx: [next-i18next-compress] Unsupported AST type: We do not know how to handle \\"MemberExpression\\" in this part of your code:
+       return <Input label={t(foo.bar)} />
+        }
+      "
+`;
 
-exports[`babel \`t\` function errors for function calls with a variable as the argument 1`] = `"unknown: [next-i18next-compress] Unknown AST type: Identifier"`;
+exports[`babel \`t\` function errors for function calls with a variable as the argument 1`] = `
+"/tests/client/src/test.jsx: [next-i18next-compress] Unsupported AST type: We do not know how to handle \\"Identifier\\" in this part of your code:
+       return <Input label={t(variable)} />
+        }
+      "
+`;
 
 exports[`babel \`t\` function ignores function calls with no arguments 1`] = `
 "export function ReactComponent() {
