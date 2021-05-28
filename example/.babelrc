@@ -1,0 +1,4 @@
+{
+  "presets": ["next/babel"],
+  "plugins": ["@devoxa/next-i18next-compress/babel"]
+}

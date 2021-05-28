@@ -1,0 +1,9 @@
+{
+  "Hello world": "Hello world",
+  "Hello  world": "Hello  world",
+  "<0>Hello world</0>": "<0>Hello world</0>",
+  "Hello <1>world</1>": "Hello <1>world</1>",
+  "<0></0> Hello world": "<0></0> Hello world",
+  "MySpecialKey": "Hello <1>world</1>",
+  "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer aliquam, tellus ut vulputate venenatis, ipsum mi efficitur est, vel ornare ex enim eget orci. Nam mattis libero quis finibus hendrerit.": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer aliquam, tellus ut vulputate venenatis, ipsum mi efficitur est, vel ornare ex enim eget orci. Nam mattis libero quis finibus hendrerit."
+}
