@@ -105,7 +105,7 @@ describe('astToKey (JSX)', () => {
     expect(key).toEqual("<0></0> There's something in the water.")
   })
 
-  it('handles interpolated variable', () => {
+  it.skip('handles interpolated variable', () => {
     const key = astToKeyFromCode(`
       <Trans t={t}>Welcome to {name}'s birthday party!</Trans>
     `)

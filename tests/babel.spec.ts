@@ -38,7 +38,7 @@ describe('babel', () => {
       expect(transform(input)).toMatchSnapshot()
     })
 
-    it('correctly compresses the argument as the key (3)', () => {
+    it.skip('correctly compresses the argument as the key (3)', () => {
       const input = `
         export function ReactComponent() {
           const { t } = useTranslation('namespace')
@@ -50,7 +50,7 @@ describe('babel', () => {
       expect(transform(input)).toMatchSnapshot()
     })
 
-    it('correctly compresses the argument as the key (4)', () => {
+    it.skip('correctly compresses the argument as the key (4)', () => {
       const input = `
         export function ReactComponent() {
           const { t } = useTranslation('namespace')
@@ -252,7 +252,7 @@ describe('babel', () => {
       expect(transform(input)).toMatchSnapshot()
     })
 
-    it('correctly compresses components with interpolated variable', () => {
+    it.skip('correctly compresses components with interpolated variable', () => {
       const input = `
         export function ReactComponent() {
           const { t } = useTranslation('namespace')
@@ -270,7 +270,7 @@ describe('babel', () => {
       expect(transform(input)).toMatchSnapshot()
     })
 
-    it('correctly compresses components with interpolated member expression', () => {
+    it.skip('correctly compresses components with interpolated member expression', () => {
       const input = `
         export function ReactComponent() {
           const { t } = useTranslation('namespace')

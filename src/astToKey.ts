@@ -43,11 +43,15 @@ export function astToKey(ast: AbstractSyntaxTree, pOptions: AstToKeyOptions): st
     // This handles a template string, like `Foobar`. It it build out of "quasis", which
     // are the template elements (= string literals), and expressions. We handle them all-in-one.
     if (astNode.type === 'TemplateLiteral') {
-      const children = [...astNode.expressions, ...astNode.quasis].sort(
-        (a, b) => (a.start || 0) - (b.start || 0)
-      )
+      const childNodes = [...astNode.expressions, ...astNode.quasis]
 
-      key += astToKey(children, { ...options, level: options.level + 1 })
+      // istanbul ignore next
+      if (childNodes.some((childNode) => !childNode.start || !childNode.end)) {
+        throw new Error('Start and end of AST node are missing, please file a bug report!')
+      }
+
+      childNodes.sort((a, b) => (a.start as number) - (b.start as number))
+      key += astToKey(childNodes, { ...options, level: options.level + 1 })
       continue
     }
 
@@ -59,26 +63,26 @@ export function astToKey(ast: AbstractSyntaxTree, pOptions: AstToKeyOptions): st
 
     // This is an interpolated variable, like `Foo ${bar}`. We do not allow this on the top level
     // to prevent calls like `t(bar)` which we can't do anything with.
-    if (options.level > 0 && astNode.type === 'Identifier') {
-      key += `{${astNode.name}}`
-      continue
-    }
+    // if (options.level > 0 && astNode.type === 'Identifier') {
+    //   key += `{${astNode.name}}`
+    //   continue
+    // }
 
     // This is an interpolated member expression, like `Foo ${bar.baz.boz}`. We do not allow this
     // on the top level to prevent calls like `t(bar.baz)` which we can't do anything with.
-    if (options.level > 0 && astNode.type === 'MemberExpression') {
-      // istanbul ignore next
-      if (!astNode.start || !astNode.end) {
-        throw new Error('Start and end of AST node are missing, please file a bug report!')
-      }
+    // if (options.level > 0 && astNode.type === 'MemberExpression') {
+    //   // istanbul ignore next
+    //   if (!astNode.start || !astNode.end) {
+    //     throw new Error('Start and end of AST node are missing, please file a bug report!')
+    //   }
 
-      // We slice the code out of the file instead of trying to recreate it from the AST
-      // because I value my continued sanity.
-      const astNodeCode = options.code.slice(astNode.start, astNode.end)
+    //   // We slice the code out of the file instead of trying to recreate it from the AST
+    //   // because I value my continued sanity.
+    //   const astNodeCode = options.code.slice(astNode.start, astNode.end)
 
-      key += `{${astNodeCode}}`
-      continue
-    }
+    //   key += `{${astNodeCode}}`
+    //   continue
+    // }
 
     // This is text inside of a JSX component. It may have whitespace, which is ignored
     // by React, so we have to clean it up to match.
