@@ -23,8 +23,8 @@ jobs:
       - name: 'Cache dependencies'
         uses: actions/cache@v2
         with:
-          path: '**/node_modules'
-          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/yarn.lock') }}
+          path: './node_modules'
+          key: ${{ runner.os }}-node_modules-${{ hashFiles('./yarn.lock') }}
 
       - name: 'Install dependencies'
         run: yarn install --frozen-lockfile
@@ -43,3 +43,19 @@ jobs:
 
       - name: 'Build package'
         run: yarn build
+
+      - name: 'Cache dependencies (example)'
+        uses: actions/cache@v2
+        with:
+          path: 'example/node_modules'
+          key: ${{ runner.os }}-node_modules-${{ hashFiles('example/yarn.lock') }}
+
+      - name: 'Install dependencies (example)'
+        run: |
+          cd example/
+          yarn install --frozen-lockfile
+
+      - name: 'Run example tests'
+        run: |
+          cd example/
+          yarn test
