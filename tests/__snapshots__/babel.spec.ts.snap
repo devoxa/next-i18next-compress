@@ -156,7 +156,16 @@ exports[`babel \`t\` function correctly compresses the argument as the key (3) 1
 }"
 `;
 
-exports[`babel \`t\` function errors for function calls with variable arguments 1`] = `"unknown: [next-i18next-compress] Unsupported code use: \`t(variable)\` is not supported, use a string literal instead."`;
+exports[`babel \`t\` function correctly compresses the argument as the key (4) 1`] = `
+"export function ReactComponent() {
+  const {
+    t
+  } = useTranslation('namespace');
+  return <Input label={t(\\"6edabc\\")} />;
+}"
+`;
+
+exports[`babel \`t\` function errors for function calls with variable arguments 1`] = `"unknown: [next-i18next-compress] Unknown AST type: Identifier"`;
 
 exports[`babel \`t\` function ignores function calls with no arguments 1`] = `
 "export function ReactComponent() {

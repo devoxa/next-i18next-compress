@@ -51,6 +51,18 @@ describe('babel', () => {
 
       expect(transform(input)).toMatchSnapshot()
     })
+
+    it('correctly compresses the argument as the key (4)', () => {
+      const input = `
+        export function ReactComponent() {
+          const { t } = useTranslation('namespace')
+          return <Input label={t(\`Welcome to \${process.env.IP_CITY}!\`)} />
+        }
+        `
+
+      expect(transform(input)).toMatchSnapshot()
+    })
+
     it('can configure the length of the compressed key', () => {
       const input = `
         export function ReactComponent() {
