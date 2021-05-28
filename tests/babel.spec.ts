@@ -3,7 +3,8 @@ import { NodePath, transformSync } from '@babel/core'
 // @ts-ignore Import JSX syntax support plugin
 import jsxSyntaxPlugin from '@babel/plugin-syntax-jsx'
 import { TransformOptions } from '@babel/core'
-import babelPlugin, { Babel, childrenToKey } from '../src/babel'
+import babelPlugin, { Babel } from '../src/babel'
+import { astToKey } from '../src/astToKey'
 import { Options } from '../src/options'
 import * as BabelTypes from '@babel/types'
 
@@ -322,8 +323,8 @@ describe('babel', () => {
     })
   })
 
-  describe('childrenToKey', () => {
-    function childrenToKeyFromJSX(jsx: string) {
+  describe('astToKey', () => {
+    function astToKeyFromJSX(jsx: string) {
       let key
 
       function fakePlugin(babel: Babel) {
@@ -333,7 +334,7 @@ describe('babel', () => {
           visitor: {
             JSXElement(path: NodePath<BabelTypes.JSXElement>) {
               if (!t.isJSXIdentifier(path.node.openingElement.name, { name: 'Trans' })) return
-              key = childrenToKey(path.node.children, jsx)
+              key = astToKey(path.node.children, { code: jsx })
             },
           },
         }
@@ -347,7 +348,7 @@ describe('babel', () => {
     }
 
     it('handles basic text', () => {
-      const key = childrenToKeyFromJSX(`
+      const key = astToKeyFromJSX(`
         <Trans t={t}>
           Sign in to your account
         </Trans>
@@ -357,7 +358,7 @@ describe('babel', () => {
     })
 
     it('handles basic text and a comment', () => {
-      const key = childrenToKeyFromJSX(`
+      const key = astToKeyFromJSX(`
         <Trans t={t}>
           Sign in to your account
           {/* but with a hidden comment */}
@@ -368,7 +369,7 @@ describe('babel', () => {
     })
 
     it('handles basic text and explicit whitespace', () => {
-      const key = childrenToKeyFromJSX(`
+      const key = astToKeyFromJSX(`
         <Trans t={t}>
           Sign in to{'  '}your account{' '}
         </Trans>
@@ -378,7 +379,7 @@ describe('babel', () => {
     })
 
     it('handles basic text and stripped whitespace', () => {
-      const key = childrenToKeyFromJSX(`
+      const key = astToKeyFromJSX(`
         <Trans t={t}>
           Lorem ipsum dolor sit amet,
           consectetur adipiscing elit.
@@ -389,7 +390,7 @@ describe('babel', () => {
     })
 
     it('handles interpolated component', () => {
-      const key = childrenToKeyFromJSX(`
+      const key = astToKeyFromJSX(`
         <Trans t={t}>
           Or <NextLink href='/register'>start your 30-day free trial</NextLink>
         </Trans>
@@ -399,7 +400,7 @@ describe('babel', () => {
     })
 
     it('handles multiple interpolated components', () => {
-      const key = childrenToKeyFromJSX(`
+      const key = astToKeyFromJSX(`
         <Trans t={t}>
           You have read and acknowledge the{' '}
           <Link>Terms of Service</Link> and <Link>Privacy Notice</Link>.
@@ -412,7 +413,7 @@ describe('babel', () => {
     })
 
     it('handles self-closing interpolated component', () => {
-      const key = childrenToKeyFromJSX(`
+      const key = astToKeyFromJSX(`
         <Trans t={t}>
           <Iceberg /> There's something in the water.
         </Trans>
@@ -422,7 +423,7 @@ describe('babel', () => {
     })
 
     it('handles interpolated variable', () => {
-      const key = childrenToKeyFromJSX(`
+      const key = astToKeyFromJSX(`
         <Trans t={t}>Welcome to {name}'s birthday party!</Trans>
       `)
 
@@ -431,7 +432,7 @@ describe('babel', () => {
 
     it('errors on interpolated expression', () => {
       expect(() =>
-        childrenToKeyFromJSX(`
+        astToKeyFromJSX(`
           <Trans t={t}>They do travel in herds: {array.join(', ')}</Trans>
         `)
       ).toThrowErrorMatchingSnapshot()
@@ -439,7 +440,7 @@ describe('babel', () => {
 
     it('errors on spread children', () => {
       expect(() =>
-        childrenToKeyFromJSX(`
+        astToKeyFromJSX(`
           <Trans>Foo {...variable} bar</Trans>
         `)
       ).toThrowErrorMatchingSnapshot()
@@ -447,7 +448,7 @@ describe('babel', () => {
 
     it('errors on fragment', () => {
       expect(() =>
-        childrenToKeyFromJSX(`
+        astToKeyFromJSX(`
           <Trans>Foo <>bar</></Trans>
         `)
       ).toThrowErrorMatchingSnapshot()
@@ -456,7 +457,7 @@ describe('babel', () => {
     it('errors on unknown AST type', () => {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore Forcing an invalid AST type
-      expect(() => childrenToKey([{ type: 'Foobar' }])).toThrowErrorMatchingSnapshot()
+      expect(() => astToKey([{ type: 'Foobar' }])).toThrowErrorMatchingSnapshot()
     })
   })
 

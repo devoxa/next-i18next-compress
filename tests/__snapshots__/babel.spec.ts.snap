@@ -189,13 +189,13 @@ exports[`babel \`t\` function ignores function calls with no arguments 1`] = `
 }"
 `;
 
-exports[`babel childrenToKey errors on fragment 1`] = `"unknown: [next-i18next-compress] Unsupported code use: \`<Trans>Text <>here</></Trans>\` is not supported"`;
+exports[`babel astToKey errors on fragment 1`] = `"unknown: [next-i18next-compress] Unknown AST type: JSXFragment"`;
 
-exports[`babel childrenToKey errors on interpolated expression 1`] = `"unknown: [next-i18next-compress] Unknown AST type: CallExpression"`;
+exports[`babel astToKey errors on interpolated expression 1`] = `"unknown: [next-i18next-compress] Unknown AST type: CallExpression"`;
 
-exports[`babel childrenToKey errors on spread children 1`] = `"unknown: [next-i18next-compress] Unsupported code use: \`<Trans>{...variable}</Trans>\` is not supported (by NextJS)"`;
+exports[`babel astToKey errors on spread children 1`] = `"unknown: [next-i18next-compress] Unknown AST type: JSXSpreadChild"`;
 
-exports[`babel childrenToKey errors on unknown AST type 1`] = `"[next-i18next-compress] Unknown AST type: Foobar"`;
+exports[`babel astToKey errors on unknown AST type 1`] = `"[next-i18next-compress] Unknown AST type: Foobar"`;
 
 exports[`babel does nothing if running in development 1`] = `
 "export function ReactComponent() {
