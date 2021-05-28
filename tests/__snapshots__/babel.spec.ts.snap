@@ -11,77 +11,6 @@ exports[`babel \`<Trans>\` component can configure the length of the compressed 
 }"
 `;
 
-exports[`babel \`<Trans>\` component correctly compresses components with interpolated React components (1) 1`] = `
-"export function ReactComponent() {
-  const {
-    t
-  } = useTranslation('namespace');
-  return <Headline as='h1' size='xl' textAlign='center'>
-              <Trans t={t} i18nKey=\\"1f04cd\\"><Link>~</Link></Trans>
-            </Headline>;
-}"
-`;
-
-exports[`babel \`<Trans>\` component correctly compresses components with interpolated React components (2) 1`] = `
-"export function ReactComponent() {
-  const {
-    t
-  } = useTranslation('namespace');
-  return <Headline as='h1' size='xl' textAlign='center'>
-              <Trans t={t} i18nKey=\\"bf56a7\\">~<Link>~</Link>
-              </Trans>
-            </Headline>;
-}"
-`;
-
-exports[`babel \`<Trans>\` component correctly compresses components with interpolated React components (3) 1`] = `
-"export function ReactComponent() {
-  const {
-    t
-  } = useTranslation('namespace');
-  return <Headline as='h1' size='xl' textAlign='center'>
-              <Trans t={t} i18nKey=\\"4f9d22\\">
-                <Link />~</Trans>
-            </Headline>;
-}"
-`;
-
-exports[`babel \`<Trans>\` component correctly compresses components with interpolated React components (4) 1`] = `
-"export function ReactComponent() {
-  const {
-    t
-  } = useTranslation('namespace');
-  return <Headline as='h1' size='xl' textAlign='center'>
-              <Trans t={t} i18nKey=\\"bb42f8\\">~<Link>~</Link>
-              </Trans>
-            </Headline>;
-}"
-`;
-
-exports[`babel \`<Trans>\` component correctly compresses components with interpolated React components (5) 1`] = `
-"export function ReactComponent() {
-  const {
-    t
-  } = useTranslation('namespace');
-  return <Headline as='h1' size='xl' textAlign='center'>
-              <Trans t={t} i18nKey=\\"bb42f8\\" />
-              <Trans t={t} i18nKey=\\"bb42f8\\" />
-            </Headline>;
-}"
-`;
-
-exports[`babel \`<Trans>\` component correctly compresses components with interpolated variable 1`] = `
-"export function ReactComponent() {
-  const {
-    t
-  } = useTranslation('namespace');
-  const name = 'Sam';
-  return <Headline as='h1' size='xl' textAlign='center'>
-              <Trans t={t} i18nKey=\\"371405\\">~{name}~</Trans>
-            </Headline>;
-}"
-`;
-
 exports[`babel \`<Trans>\` component correctly compresses the child text node as the key 1`] = `
 "export function ReactComponent() {
   const {
@@ -93,7 +22,42 @@ exports[`babel \`<Trans>\` component correctly compresses the child text node as
 }"
 `;
 
-exports[`babel \`<Trans>\` component correctly compresses the i18nKey attribute as the key (1) 1`] = `
+exports[`babel \`<Trans>\` component correctly compresses the interpolated React component (inline) 1`] = `
+"export function ReactComponent() {
+  const {
+    t
+  } = useTranslation('namespace');
+  return <Headline as='h1' size='xl' textAlign='center'>
+              <Trans t={t} i18nKey=\\"bf56a7\\">~<Link>~</Link>
+              </Trans>
+            </Headline>;
+}"
+`;
+
+exports[`babel \`<Trans>\` component correctly compresses the interpolated React component (overarching) 1`] = `
+"export function ReactComponent() {
+  const {
+    t
+  } = useTranslation('namespace');
+  return <Headline as='h1' size='xl' textAlign='center'>
+              <Trans t={t} i18nKey=\\"1f04cd\\"><Link>~</Link></Trans>
+            </Headline>;
+}"
+`;
+
+exports[`babel \`<Trans>\` component correctly compresses the interpolated React component (self-closing) 1`] = `
+"export function ReactComponent() {
+  const {
+    t
+  } = useTranslation('namespace');
+  return <Headline as='h1' size='xl' textAlign='center'>
+              <Trans t={t} i18nKey=\\"4f9d22\\">
+                <Link />~</Trans>
+            </Headline>;
+}"
+`;
+
+exports[`babel \`<Trans>\` component correctly compresses the string literal i18nKey attribute as the key 1`] = `
 "export function ReactComponent() {
   const {
     t
@@ -104,20 +68,44 @@ exports[`babel \`<Trans>\` component correctly compresses the i18nKey attribute 
 }"
 `;
 
-exports[`babel \`<Trans>\` component correctly compresses the i18nKey attribute as the key (2) 1`] = `
+exports[`babel \`<Trans>\` component correctly compresses the string literal i18nKey attribute as the key with interpolated child nodes 1`] = `
+"export function ReactComponent() {
+  const {
+    t
+  } = useTranslation('namespace');
+  return <Headline as='h1' size='xl' textAlign='center'>
+              <Trans t={t} i18nKey=\\"bb42f8\\">~<Link>~</Link>
+              </Trans>
+            </Headline>;
+}"
+`;
+
+exports[`babel \`<Trans>\` component correctly compresses the string literal i18nKey attribute as the key without child nodes 1`] = `
 "export function ReactComponent() {
   const {
     t
   } = useTranslation('namespace');
   return <Headline as='h1' size='xl' textAlign='center'>
               <Trans t={t} i18nKey=\\"bb42f8\\" />
+              <Trans t={t} i18nKey=\\"bb42f8\\" />
             </Headline>;
 }"
 `;
 
-exports[`babel \`<Trans>\` component errors for components with variable i18nKey attribute 1`] = `"unknown: [next-i18next-compress] Unsupported code use: \`<Trans i18nKey={variable}>\` is not supported, use a string literal instead."`;
+exports[`babel \`<Trans>\` component errors for components with a variable as the i18nKey attribute 1`] = `
+"/tests/client/src/test.jsx: [next-i18next-compress] Unsupported AST type: We do not know how to handle \\"JSXExpressionContainer\\" in this part of your code:
+         <Trans t={t} i18nKey={variable} />
+            </Headline>
+  "
+`;
 
-exports[`babel \`<Trans>\` component errors for components with variable spreads 1`] = `"unknown: [next-i18next-compress] Unsupported code use: \`<Trans {...variable}>\` is not supported, use explicit attributes instead."`;
+exports[`babel \`<Trans>\` component errors for components with variable spreads 1`] = `
+"/tests/client/src/test.jsx: [next-i18next-compress] Unsupported AST type: We do not know how to handle \\"JSXSpreadAttribute\\" in this part of your code:
+'>
+              <Trans t={t} {...variable} />
+            </Headline>
+  "
+`;
 
 exports[`babel \`t\` function can configure the length of the compressed key 1`] = `
 "export function ReactComponent() {
@@ -128,7 +116,7 @@ exports[`babel \`t\` function can configure the length of the compressed key 1`]
 }"
 `;
 
-exports[`babel \`t\` function correctly compresses the argument as the key 1`] = `
+exports[`babel \`t\` function correctly compresses the string literal argument as the key 1`] = `
 "export function ReactComponent() {
   const {
     t
@@ -137,7 +125,28 @@ exports[`babel \`t\` function correctly compresses the argument as the key 1`] =
 }"
 `;
 
-exports[`babel \`t\` function errors for function calls with variable arguments 1`] = `"unknown: [next-i18next-compress] Unsupported code use: \`t(variable)\` is not supported, use a string literal instead."`;
+exports[`babel \`t\` function correctly compresses the template string argument as the key 1`] = `
+"export function ReactComponent() {
+  const {
+    t
+  } = useTranslation('namespace');
+  return <Input label={t(\\"f2488f\\")} />;
+}"
+`;
+
+exports[`babel \`t\` function errors for function calls with a member expression as the argument 1`] = `
+"/tests/client/src/test.jsx: [next-i18next-compress] Unsupported AST type: We do not know how to handle \\"MemberExpression\\" in this part of your code:
+       return <Input label={t(foo.bar)} />
+        }
+      "
+`;
+
+exports[`babel \`t\` function errors for function calls with a variable as the argument 1`] = `
+"/tests/client/src/test.jsx: [next-i18next-compress] Unsupported AST type: We do not know how to handle \\"Identifier\\" in this part of your code:
+       return <Input label={t(variable)} />
+        }
+      "
+`;
 
 exports[`babel \`t\` function ignores function calls with no arguments 1`] = `
 "export function ReactComponent() {
@@ -147,14 +156,6 @@ exports[`babel \`t\` function ignores function calls with no arguments 1`] = `
   return <Input label={t()} />;
 }"
 `;
-
-exports[`babel childrenToKey errors on fragment 1`] = `"unknown: [next-i18next-compress] Unsupported code use: \`<Trans>Text <>here</></Trans>\` is not supported"`;
-
-exports[`babel childrenToKey errors on interpolated expression 1`] = `"unknown: [next-i18next-compress] Unknown AST type: CallExpression"`;
-
-exports[`babel childrenToKey errors on spread children 1`] = `"unknown: [next-i18next-compress] Unsupported code use: \`<Trans>{...variable}</Trans>\` is not supported (by NextJS)"`;
-
-exports[`babel childrenToKey errors on unknown AST type 1`] = `"[next-i18next-compress] Unknown AST type: Foobar"`;
 
 exports[`babel does nothing if running in development 1`] = `
 "export function ReactComponent() {
