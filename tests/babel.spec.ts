@@ -135,6 +135,23 @@ describe('babel', () => {
       expect(transform(input)).toMatchSnapshot()
     })
 
+    it('correctly compresses the template string i18nKey attribute as the key', () => {
+      const input = `
+        export function ReactComponent() {
+          const { t } = useTranslation('namespace')
+          return (
+            <Headline as='h1' size='xl' textAlign='center'>
+              <Trans t={t} i18nKey={\`Forgot password\`}>
+                This child text node should be completely ignored.
+              </Trans>
+            </Headline>
+          )
+        }
+      `
+
+      expect(transform(input)).toMatchSnapshot()
+    })
+
     it('can configure the length of the compressed key', () => {
       const input = `
         export function ReactComponent() {

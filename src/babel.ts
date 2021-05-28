@@ -99,13 +99,9 @@ export default function nextI18nextCompressBabelPlugin(
         let i18nKeyAttributeValue
         const i18nKeyAttribute = elementJsxAttributes.find((x) => x.name.name === 'i18nKey')
         if (i18nKeyAttribute && i18nKeyAttribute.value) {
-          // We don't support cases where the attribute is not a string, because
-          // we can't figure out what the actual value is easily.
-          if (i18nKeyAttribute.value.type !== 'StringLiteral') {
-            throw new UnsupportedAstTypeError(i18nKeyAttribute.value, state.file.code)
-          }
-
-          i18nKeyAttributeValue = i18nKeyAttribute.value.value
+          i18nKeyAttributeValue = astToKey([i18nKeyAttribute.value] as AbstractSyntaxTree, {
+            code: state.file.code,
+          })
         }
 
         // Get the key based on the children, if they exist

@@ -92,11 +92,22 @@ exports[`babel \`<Trans>\` component correctly compresses the string literal i18
 }"
 `;
 
+exports[`babel \`<Trans>\` component correctly compresses the template string i18nKey attribute as the key 1`] = `
+"export function ReactComponent() {
+  const {
+    t
+  } = useTranslation('namespace');
+  return <Headline as='h1' size='xl' textAlign='center'>
+              <Trans t={t} i18nKey=\\"bb42f8\\" />
+            </Headline>;
+}"
+`;
+
 exports[`babel \`<Trans>\` component errors for components with a variable as the i18nKey attribute 1`] = `
-"/tests/client/src/test.jsx: [next-i18next-compress] Unsupported AST type: We do not know how to handle \\"JSXExpressionContainer\\" in this part of your code:
-         <Trans t={t} i18nKey={variable} />
+"/tests/client/src/test.jsx: [next-i18next-compress] Unsupported AST type: We do not know how to handle \\"Identifier\\" in this part of your code:
+        <Trans t={t} i18nKey={variable} />
             </Headline>
-  "
+ "
 `;
 
 exports[`babel \`<Trans>\` component errors for components with variable spreads 1`] = `
