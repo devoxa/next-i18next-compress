@@ -50,6 +50,7 @@ export function astToKey(ast: AbstractSyntaxTree, pOptions: AstToKeyOptions): st
         throw new Error('Start or end of a AST node are missing, please file a bug report!')
       }
 
+      childNodes.sort((a, b) => (a.start as number) - (b.start as number))
       key += astToKey(childNodes, { ...options, level: options.level + 1 })
       continue
     }
