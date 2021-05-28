@@ -36,6 +36,24 @@ function astToKeyFromCode(code: string) {
   return key
 }
 
+describe('astToKey (functional)', () => {
+  it('handles basic text', () => {
+    const key = astToKeyFromCode(`
+      t('Sign in to your account')
+    `)
+
+    expect(key).toEqual('Sign in to your account')
+  })
+
+  it('handles template literal', () => {
+    const key = astToKeyFromCode(`
+      t(\`Sign in to your account\`)
+    `)
+
+    expect(key).toEqual('Sign in to your account')
+  })
+})
+
 describe('astToKey (JSX)', () => {
   it('handles basic text', () => {
     const key = astToKeyFromCode(`
