@@ -20,10 +20,16 @@ SERVER_PID=$!
 echo "INFO Waiting for server startup"
 sleep 1
 
-echo "INFO Writing actual snapshots"
+echo "INFO Writing server output"
 curl -s -f localhost:3000 | ./pup '#__next' > __snapshots__/en.actual.html
 curl -s -f localhost:3000/de | ./pup '#__next' > __snapshots__/de.actual.html
 
-echo "INFO Comparing with expected snapshots"
+if test "$1" = "-u"; then
+  echo "INFO Writing server output as snapshot"
+  cp __snapshots__/en.actual.html __snapshots__/en.expected.html
+  cp __snapshots__/de.actual.html __snapshots__/de.expected.html
+fi
+
+echo "INFO Comparing server output with snapshots"
 diff __snapshots__/en.expected.html __snapshots__/en.actual.html
 diff __snapshots__/de.expected.html __snapshots__/de.actual.html
