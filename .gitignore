@@ -1,8 +1,10 @@
 # Compiled Output
 dist/
+.next/
 
 # Tests
 coverage/
+__snapshots__/
 
 # Dependencies
 node_modules/
