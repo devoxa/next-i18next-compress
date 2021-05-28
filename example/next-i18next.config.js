@@ -3,4 +3,6 @@ module.exports = {
     defaultLocale: 'en',
     locales: ['en', 'de'],
   },
+
+  serializeConfig: false,
 }
