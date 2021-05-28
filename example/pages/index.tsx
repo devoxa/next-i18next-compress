@@ -1,6 +1,7 @@
 import { GetStaticProps } from 'next'
-import { useTranslation } from 'next-i18next'
+import { Trans, useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import React from 'react'
 import nextI18NextConfig from '../next-i18next.config.js'
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => ({
@@ -13,6 +14,9 @@ export default function Home() {
   return (
     <ul>
       <li>{t('Hello world')}</li>
+      <li>
+        <Trans t={t}>Hello world</Trans>
+      </li>
     </ul>
   )
 }
