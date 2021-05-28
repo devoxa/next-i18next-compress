@@ -46,6 +46,9 @@
     lodash "^4.17.13"
     to-fast-properties "^2.0.0"
 
+"@devoxa/next-i18next-compress@file:../":
+  version "1.1.0"
+
 "@hapi/accept@5.0.2":
   version "5.0.2"
   resolved "https://registry.yarnpkg.com/@hapi/accept/-/accept-5.0.2.tgz#ab7043b037e68b722f93f376afb05e85c0699523"

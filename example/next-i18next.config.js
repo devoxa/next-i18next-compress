@@ -1,3 +1,5 @@
+const nextI18nextCompressConfig = require('@devoxa/next-i18next-compress/config')
+
 module.exports = {
   i18n: {
     defaultLocale: 'en',
@@ -5,4 +7,5 @@ module.exports = {
   },
 
   serializeConfig: false,
+  ...nextI18nextCompressConfig(),
 }

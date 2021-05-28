@@ -8,6 +8,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@devoxa/next-i18next-compress": "file:../",
     "next": "10.2.3",
     "next-i18next": "^8.3.0",
     "react": "17.0.2",
