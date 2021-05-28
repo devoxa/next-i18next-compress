@@ -96,6 +96,17 @@ describe('babel', () => {
 
       expect(() => transform(input)).toThrowErrorMatchingSnapshot()
     })
+
+    it('errors for function calls with member expressions', () => {
+      const input = `
+        export function ReactComponent() {
+          const { t } = useTranslation('namespace')
+          return <Input label={t(foo.bar)} />
+        }
+      `
+
+      expect(() => transform(input)).toThrowErrorMatchingSnapshot()
+    })
   })
 
   describe('`<Trans>` component', () => {
@@ -261,6 +272,23 @@ describe('babel', () => {
       expect(transform(input)).toMatchSnapshot()
     })
 
+    it('correctly compresses components with interpolated member expression', () => {
+      const input = `
+        export function ReactComponent() {
+          const { t } = useTranslation('namespace')
+          return (
+            <Headline as='h1' size='xl' textAlign='center'>
+              <Trans t={t}>
+                Welcome to {process.env.IP_CITY}!
+              </Trans>
+            </Headline>
+          )
+        }
+      `
+
+      expect(transform(input)).toMatchSnapshot()
+    })
+
     it('errors for components with variable spreads', () => {
       const input = `
         export function ReactComponent() {
@@ -305,7 +333,7 @@ describe('babel', () => {
           visitor: {
             JSXElement(path: NodePath<BabelTypes.JSXElement>) {
               if (!t.isJSXIdentifier(path.node.openingElement.name, { name: 'Trans' })) return
-              key = childrenToKey(path.node.children)
+              key = childrenToKey(path.node.children, jsx)
             },
           },
         }
