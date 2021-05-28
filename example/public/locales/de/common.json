@@ -1,3 +1,9 @@
 {
-  "Hello world": "Hallo Welt"
+  "Hello world": "Hallo Welt",
+  "Hello  world": "Hallo  Welt",
+  "<0>Hello world</0>": "<0>Hallo Welt</0>",
+  "Hello <1>world</1>": "Hallo <1>Welt</1>",
+  "<0></0> Hello world": "<0></0> Hallo Welt",
+  "MySpecialKey": "Hallo <1>Welt</1>",
+  "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer aliquam, tellus ut vulputate venenatis, ipsum mi efficitur est, vel ornare ex enim eget orci. Nam mattis libero quis finibus hendrerit.": "LOREM IPSUM DOLOR SIT AMET, CONSECTETUR ADIPISCING ELIT. INTEGER ALIQUAM, TELLUS UT VULPUTATE VENENATIS, IPSUM MI EFFICITUR EST, VEL ORNARE EX ENIM EGET ORCI. NAM MATTIS LIBERO QUIS FINIBUS HENDRERIT."
 }
