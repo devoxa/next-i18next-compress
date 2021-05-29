@@ -1,5 +1,6 @@
 # Tests
 coverage/
+example/
 
 # Dependencies
 node_modules/
