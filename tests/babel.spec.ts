@@ -253,7 +253,7 @@ describe('babel', () => {
           return (
             <Headline as='h1' size='xl' textAlign='center'>
               <Trans t={t}>
-                Happy birthday, {{name}}!
+                Happy birthday, {{ name }}!
               </Trans>
             </Headline>
           )
