@@ -1,4 +1,5 @@
 import * as BabelTypes from '@babel/types'
+import colors from 'colors/safe'
 
 export type AbstractSyntaxTree = Array<
   | BabelTypes.Expression
@@ -122,14 +123,23 @@ export class UnsupportedAstTypeError extends Error {
       `We do not know how to handle "${astNode.type}"`
 
     if (code && astNode.start && astNode.end) {
-      const start = Math.max(0, astNode.start - 30)
-      const end = Math.min(code.length, astNode.end + 30)
-
-      message += ` in this part of your code:\n` + code.slice(start, end)
+      const codeRange = printCodeRange(code, astNode.start, astNode.end, 30)
+      message += ` in this part of your code:\n${codeRange}`
     } else {
       message += '.'
     }
 
     super(message)
   }
+}
+
+function printCodeRange(code: string, start: number, end: number, padding: number) {
+  const slicedStartPadding = code.slice(Math.max(0, start - padding), start)
+  const slicedCode = code.slice(start, end)
+  const slicedEndPadding = code.slice(end, Math.min(code.length, end + padding))
+
+  // istanbul ignore next
+  const format = process.env.NODE_ENV === 'test' ? (x: string) => x : colors.red
+
+  return slicedStartPadding + format(slicedCode) + slicedEndPadding
 }
