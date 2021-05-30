@@ -106,12 +106,10 @@ export default function nextI18nextCompressBabelPlugin(babel: Babel): {
         }
 
         // Get the key based on the children, if they exist
-        let childrenKey
-        if (path.node.children.length > 0) {
-          childrenKey = astToKey(path.node.children as AbstractSyntaxTree, {
-            code: state.file.code,
-          })
-        }
+        const childrenKey = astToKey(path.node.children as AbstractSyntaxTree, {
+          code: state.file.code,
+          jsx: true,
+        })
 
         // The key is either the `i18nKey` attribute or the child text node
         const key = (i18nKeyAttributeValue || childrenKey) as string

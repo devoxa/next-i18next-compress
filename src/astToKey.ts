@@ -17,11 +17,10 @@ export type AbstractSyntaxTree = Array<
 
 export interface AstToKeyOptions {
   code: string
-  level?: number
+  jsx?: boolean
 }
 
-export function astToKey(ast: AbstractSyntaxTree, pOptions: AstToKeyOptions): string {
-  const options = { level: 0, ...pOptions }
+export function astToKey(ast: AbstractSyntaxTree, options: AstToKeyOptions): string {
   let key = ''
 
   // Ignore empty JSXText nodes, because they get stripped away by React
@@ -51,7 +50,7 @@ export function astToKey(ast: AbstractSyntaxTree, pOptions: AstToKeyOptions): st
       }
 
       childNodes.sort((a, b) => (a.start as number) - (b.start as number))
-      key += astToKey(childNodes, { ...options, level: options.level + 1 })
+      key += astToKey(childNodes, options)
       continue
     }
 
@@ -76,8 +75,8 @@ export function astToKey(ast: AbstractSyntaxTree, pOptions: AstToKeyOptions): st
     }
 
     // This is a JSX component, like `<Trans><Foo>...</Foo></Trans>`
-    if (astNode.type === 'JSXElement') {
-      const childNodesKey = astToKey(astNode.children, { ...options, level: options.level + 1 })
+    if (options.jsx && astNode.type === 'JSXElement') {
+      const childNodesKey = astToKey(astNode.children, options)
 
       key += `<${i}>${childNodesKey}</${i}>`
       continue
@@ -85,7 +84,7 @@ export function astToKey(ast: AbstractSyntaxTree, pOptions: AstToKeyOptions): st
 
     // This is an interpolated expression, like `<Trans>Foo {...}</Trans>`
     if (astNode.type === 'JSXExpressionContainer') {
-      key += astToKey([astNode.expression], { ...options, level: options.level + 1 })
+      key += astToKey([astNode.expression], options)
       continue
     }
 
@@ -94,14 +93,29 @@ export function astToKey(ast: AbstractSyntaxTree, pOptions: AstToKeyOptions): st
       continue
     }
 
-    // We still have to add support for the following types:
-    // - Identifier
-    // - MemberExpression
+    // This is an interpolated variable, like "t(`<Trans>Foo {{bar}}</Trans>`)" in JSX components.
+    // "t('Foo {{bar}}')" in template strings is handled like a string literal.
+    // (!) Keep in mind that `{{ name }}` is different than `{{name}}`, so we handle it exactly as-is!
+    if (options.jsx && astNode.type === 'ObjectExpression') {
+      // istanbul ignore next
+      if (!astNode.start || !astNode.end) {
+        throw new Error('Start or end of a AST node are missing, please file a bug report!')
+      }
+
+      // We slice the code out of the file instead of trying to recreate it from the AST
+      // because I value my continued sanity.
+      const astNodeCode = options.code.slice(astNode.start, astNode.end)
+
+      key += `{${astNodeCode}}`
+      continue
+    }
 
     // We deliberately do not handle the following types:
     // - JSXSpreadChild is not supported by React/NextJS
     // - CallExpression is not supported `i18next`
     // - JSXFragment is not supported by `i18next`
+    // - Identifier is generally a misuse (should be `{{variable}}` instead of `{variable}`)
+    // - MemberExpression is generally a misuse (not supported by React)
 
     throw new UnsupportedAstTypeError(astNode, options.code)
   }
