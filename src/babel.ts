@@ -17,9 +17,10 @@ interface State {
   file: { opts: { filename?: string }; code: string }
 }
 
-export default function nextI18nextCompressBabelPlugin(
-  babel: Babel
-): { name: string; visitor: Visitor } {
+export default function nextI18nextCompressBabelPlugin(babel: Babel): {
+  name: string
+  visitor: Visitor
+} {
   const t = babel.types
 
   return {
