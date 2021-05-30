@@ -82,6 +82,7 @@ export default function Home() {
             libero quis finibus hendrerit.
           </Trans>
         </li>
+        {/* prettier-ignore */}
         <li>
           13: <Trans t={t}>Happy birthday, {{name}}!</Trans>
         </li>
