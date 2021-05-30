@@ -88,7 +88,6 @@ export function astToKey(ast: AbstractSyntaxTree, options: AstToKeyOptions): str
 
     // This is an interpolated variable, like "t(`<Trans>Foo {{bar}}</Trans>`)" in JSX components.
     // "t('Foo {{bar}}')" in template strings is handled like a string literal.
-    // (!) Keep in mind that `{{ name }}` is different than `{{name}}`, so we handle it exactly as-is!
     if (options.jsx && astNode.type === 'ObjectExpression') {
       // istanbul ignore next
       if (!astNode.start || !astNode.end) {
