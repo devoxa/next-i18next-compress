@@ -42,15 +42,7 @@ export function astToKey(ast: AbstractSyntaxTree, options: AstToKeyOptions): str
     // This handles a template string, like `Foobar`. It it build out of "quasis", which
     // are the template elements (= string literals), and expressions. We handle them all-in-one.
     if (astNode.type === 'TemplateLiteral') {
-      const childNodes = [...astNode.expressions, ...astNode.quasis]
-
-      // istanbul ignore next
-      if (childNodes.some((childNode) => !childNode.start || !childNode.end)) {
-        throw new Error('Start or end of a AST node are missing, please file a bug report!')
-      }
-
-      childNodes.sort((a, b) => (a.start as number) - (b.start as number))
-      key += astToKey(childNodes, options)
+      key += astToKey([...astNode.expressions, ...astNode.quasis], options)
       continue
     }
 
