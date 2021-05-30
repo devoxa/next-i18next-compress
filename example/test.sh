@@ -31,5 +31,5 @@ if test "$1" = "-u"; then
 fi
 
 echo "INFO Comparing server output with snapshots"
-diff __snapshots__/en.expected.html __snapshots__/en.actual.html
-diff __snapshots__/de.expected.html __snapshots__/de.actual.html
+diff -U 3 --color __snapshots__/en.expected.html __snapshots__/en.actual.html
+diff -U 3 --color __snapshots__/de.expected.html __snapshots__/de.actual.html

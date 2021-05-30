@@ -106,12 +106,10 @@ export default function nextI18nextCompressBabelPlugin(babel: Babel): {
         }
 
         // Get the key based on the children, if they exist
-        let childrenKey
-        if (path.node.children.length > 0) {
-          childrenKey = astToKey(path.node.children as AbstractSyntaxTree, {
-            code: state.file.code,
-          })
-        }
+        const childrenKey = astToKey(path.node.children as AbstractSyntaxTree, {
+          code: state.file.code,
+          jsx: true,
+        })
 
         // The key is either the `i18nKey` attribute or the child text node
         const key = (i18nKeyAttributeValue || childrenKey) as string
@@ -129,20 +127,19 @@ export default function nextI18nextCompressBabelPlugin(babel: Babel): {
         )
         path.node.openingElement.attributes.push(keyAttribute as any) // eslint-disable-line @typescript-eslint/no-explicit-any
 
-        const canTurnIntoSelfClosing =
-          path.node.children.length === 0 ||
-          (path.node.children.length === 1 && path.node.children[0].type === 'JSXText')
+        // We can turn any components into self-closing that have either no or only text children
+        const canTurnIntoSelfClosing = path.node.children.every(
+          (childNode) => childNode.type === 'JSXText'
+        )
 
         if (canTurnIntoSelfClosing) {
-          // If there is no children or only one text child, turn it into a self-closing element
-          // with no children or additional closing element.
+          // Turn it into a self-closing element with no children or additional closing element.
           // `<Trans>Foo</Trans>` -> `<Trans i18nKey='...' />`
           path.node.children = []
           delete path.node.closingElement
           path.node.openingElement.selfClosing = true
         } else {
-          // If there is something else, at least compress the text nodes to single characters
-          // since they will be replaced by the translated text.
+          // Compress the text nodes to single characters since they will be replaced by the translated text.
           // `<Trans>Foo <Link>Bar</Link></Trans>` -> `<Trans i18nKey={...}>~<Link>~</Link></Trans>`
           compressChildTextNodes(path.node.children as BabelTypes.JSXElement['children'])
         }

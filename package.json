@@ -18,6 +18,9 @@
     "extends": "@devoxa"
   },
   "prettier": "@devoxa/prettier-config",
+  "dependencies": {
+    "colors": "^1.4.0"
+  },
   "devDependencies": {
     "@babel/core": "^7.14.3",
     "@babel/plugin-syntax-jsx": "^7.12.13",

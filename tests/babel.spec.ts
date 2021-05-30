@@ -40,6 +40,18 @@ describe('babel', () => {
       expect(transform(input)).toMatchSnapshot()
     })
 
+    it('correctly compresses the interpolated variable argument as the key', () => {
+      const input = `
+        export function ReactComponent() {
+          const { t } = useTranslation('namespace')
+          const name = 'Sam'
+          return <Input label={t(\`Happy birthday, {{name}}!\`, { name })} />
+        }
+      `
+
+      expect(transform(input)).toMatchSnapshot()
+    })
+
     it('can configure the length of the compressed key', () => {
       const input = `
         export function ReactComponent() {
@@ -224,6 +236,24 @@ describe('babel', () => {
             <Headline as='h1' size='xl' textAlign='center'>
               <Trans t={t} i18nKey='Forgot password'>
                 Forgot <Link>password</Link>
+              </Trans>
+            </Headline>
+          )
+        }
+      `
+
+      expect(transform(input)).toMatchSnapshot()
+    })
+
+    it('correctly compresses the interpolated variable', () => {
+      const input = `
+        export function ReactComponent() {
+          const { t } = useTranslation('namespace')
+          const name = 'Sam'
+          return (
+            <Headline as='h1' size='xl' textAlign='center'>
+              <Trans t={t}>
+                Happy birthday, {{ name }}!
               </Trans>
             </Headline>
           )

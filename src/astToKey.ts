@@ -1,4 +1,5 @@
 import * as BabelTypes from '@babel/types'
+import colors from 'colors/safe'
 
 export type AbstractSyntaxTree = Array<
   | BabelTypes.Expression
@@ -17,11 +18,10 @@ export type AbstractSyntaxTree = Array<
 
 export interface AstToKeyOptions {
   code: string
-  level?: number
+  jsx?: boolean
 }
 
-export function astToKey(ast: AbstractSyntaxTree, pOptions: AstToKeyOptions): string {
-  const options = { level: 0, ...pOptions }
+export function astToKey(ast: AbstractSyntaxTree, options: AstToKeyOptions): string {
   let key = ''
 
   // Ignore empty JSXText nodes, because they get stripped away by React
@@ -43,15 +43,7 @@ export function astToKey(ast: AbstractSyntaxTree, pOptions: AstToKeyOptions): st
     // This handles a template string, like `Foobar`. It it build out of "quasis", which
     // are the template elements (= string literals), and expressions. We handle them all-in-one.
     if (astNode.type === 'TemplateLiteral') {
-      const childNodes = [...astNode.expressions, ...astNode.quasis]
-
-      // istanbul ignore next
-      if (childNodes.some((childNode) => !childNode.start || !childNode.end)) {
-        throw new Error('Start or end of a AST node are missing, please file a bug report!')
-      }
-
-      childNodes.sort((a, b) => (a.start as number) - (b.start as number))
-      key += astToKey(childNodes, { ...options, level: options.level + 1 })
+      key += astToKey([...astNode.expressions, ...astNode.quasis], options)
       continue
     }
 
@@ -76,8 +68,8 @@ export function astToKey(ast: AbstractSyntaxTree, pOptions: AstToKeyOptions): st
     }
 
     // This is a JSX component, like `<Trans><Foo>...</Foo></Trans>`
-    if (astNode.type === 'JSXElement') {
-      const childNodesKey = astToKey(astNode.children, { ...options, level: options.level + 1 })
+    if (options.jsx && astNode.type === 'JSXElement') {
+      const childNodesKey = astToKey(astNode.children, options)
 
       key += `<${i}>${childNodesKey}</${i}>`
       continue
@@ -85,7 +77,7 @@ export function astToKey(ast: AbstractSyntaxTree, pOptions: AstToKeyOptions): st
 
     // This is an interpolated expression, like `<Trans>Foo {...}</Trans>`
     if (astNode.type === 'JSXExpressionContainer') {
-      key += astToKey([astNode.expression], { ...options, level: options.level + 1 })
+      key += astToKey([astNode.expression], options)
       continue
     }
 
@@ -94,14 +86,28 @@ export function astToKey(ast: AbstractSyntaxTree, pOptions: AstToKeyOptions): st
       continue
     }
 
-    // We still have to add support for the following types:
-    // - Identifier
-    // - MemberExpression
+    // This is an interpolated variable, like "t(`<Trans>Foo {{bar}}</Trans>`)" in JSX components.
+    // "t('Foo {{bar}}')" in template strings is handled like a string literal.
+    if (options.jsx && astNode.type === 'ObjectExpression') {
+      // istanbul ignore next
+      if (!astNode.start || !astNode.end) {
+        throw new Error('Start or end of a AST node are missing, please file a bug report!')
+      }
+
+      // We slice the code out of the file instead of trying to recreate it from the AST
+      // because I value my continued sanity.
+      const astNodeCode = options.code.slice(astNode.start, astNode.end)
+
+      key += `{${astNodeCode}}`
+      continue
+    }
 
     // We deliberately do not handle the following types:
     // - JSXSpreadChild is not supported by React/NextJS
     // - CallExpression is not supported `i18next`
     // - JSXFragment is not supported by `i18next`
+    // - Identifier is generally a misuse (should be `{{variable}}` instead of `{variable}`)
+    // - MemberExpression is generally a misuse (not supported by React)
 
     throw new UnsupportedAstTypeError(astNode, options.code)
   }
@@ -116,14 +122,23 @@ export class UnsupportedAstTypeError extends Error {
       `We do not know how to handle "${astNode.type}"`
 
     if (code && astNode.start && astNode.end) {
-      const start = Math.max(0, astNode.start - 30)
-      const end = Math.min(code.length, astNode.end + 30)
-
-      message += ` in this part of your code:\n` + code.slice(start, end)
+      const codeRange = printCodeRange(code, astNode.start, astNode.end, 30)
+      message += ` in this part of your code:\n${codeRange}`
     } else {
       message += '.'
     }
 
     super(message)
   }
+}
+
+function printCodeRange(code: string, start: number, end: number, padding: number) {
+  const slicedStartPadding = code.slice(Math.max(0, start - padding), start)
+  const slicedCode = code.slice(start, end)
+  const slicedEndPadding = code.slice(end, Math.min(code.length, end + padding))
+
+  // istanbul ignore next
+  const format = process.env.NODE_ENV === 'test' ? (x: string) => x : colors.red
+
+  return slicedStartPadding + format(slicedCode) + slicedEndPadding
 }

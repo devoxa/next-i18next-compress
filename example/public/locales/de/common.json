@@ -1,5 +1,6 @@
 {
   "Hello world": "Hallo Welt",
+  "Happy birthday, {{name}}!": "Alles Gute zum Geburtstag, {{name}}!",
   "Hello  world": "Hallo  Welt",
   "<0>Hello world</0>": "<0>Hallo Welt</0>",
   "Hello <1>world</1>": "Hallo <1>Welt</1>",
