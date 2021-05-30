@@ -18,6 +18,7 @@ export default function Home() {
         <li>1: {t('Hello world')}</li>
         <li>2: {t(`Hello world`)}</li>
         <li>3: {t(`Happy birthday, {{name}}!`, { name })}</li>
+        <li>4: {t(`Happy birthday, {{ name }}!`, { name })}</li>
       </ul>
 
       <ul>
@@ -83,6 +84,9 @@ export default function Home() {
         </li>
         <li>
           13: <Trans t={t}>Happy birthday, {{name}}!</Trans>
+        </li>
+        <li>
+          14: <Trans t={t}>Happy birthday, {{ name }}!</Trans>
         </li>
       </ul>
     </>

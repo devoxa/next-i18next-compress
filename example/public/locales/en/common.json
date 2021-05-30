@@ -1,6 +1,7 @@
 {
   "Hello world": "Hello world",
   "Happy birthday, {{name}}!": "Happy birthday, {{name}}!",
+  "Happy birthday, {{ name }}!": "Happy birthday to {{ name }} too!",
   "Hello  world": "Hello  world",
   "<0>Hello world</0>": "<0>Hello world</0>",
   "Hello <1>world</1>": "Hello <1>world</1>",
