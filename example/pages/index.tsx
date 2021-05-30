@@ -10,12 +10,14 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => ({
 
 export default function Home() {
   const { t } = useTranslation()
+  const name = 'Sam'
 
   return (
     <>
       <ul>
         <li>1: {t('Hello world')}</li>
         <li>2: {t(`Hello world`)}</li>
+        <li>3: {t(`Happy birthday, {{name}}!`, { name })}</li>
       </ul>
 
       <ul>
@@ -78,6 +80,9 @@ export default function Home() {
             vulputate venenatis, ipsum mi efficitur est, vel ornare ex enim eget orci. Nam mattis
             libero quis finibus hendrerit.
           </Trans>
+        </li>
+        <li>
+          13: <Trans t={t}>Happy birthday, {{name}}!</Trans>
         </li>
       </ul>
     </>
