@@ -9,6 +9,7 @@ const localeFileString = JSON.stringify({
   'Or <1>start your 30-day free trial</1>':
     'Oder <1>beginne deine 30-Tage kostenlose Probephase</1>',
   'Your sign in credentials were incorrect.': 'Deine Anmeldedaten waren inkorrekt.',
+  'Happy birthday, {{name}}!': 'Alles Gute zum Geburtstag, {{name}}!',
 })
 
 describe('parseLocaleFile', () => {
