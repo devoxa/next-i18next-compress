@@ -57,6 +57,20 @@ exports[`babel \`<Trans>\` component correctly compresses the interpolated React
 }"
 `;
 
+exports[`babel \`<Trans>\` component correctly compresses the interpolated variable 1`] = `
+"export function ReactComponent() {
+  const {
+    t
+  } = useTranslation('namespace');
+  const name = 'Sam';
+  return <Headline as='h1' size='xl' textAlign='center'>
+              <Trans t={t} i18nKey=\\"d81b0f\\">~{{
+        name
+      }}~</Trans>
+            </Headline>;
+}"
+`;
+
 exports[`babel \`<Trans>\` component correctly compresses the string literal i18nKey attribute as the key 1`] = `
 "export function ReactComponent() {
   const {
@@ -124,6 +138,18 @@ exports[`babel \`t\` function can configure the length of the compressed key 1`]
     t
   } = useTranslation('namespace');
   return <Input label={t(\\"f2488fd4ef4adbc6\\")} />;
+}"
+`;
+
+exports[`babel \`t\` function correctly compresses the interpolated variable argument as the key 1`] = `
+"export function ReactComponent() {
+  const {
+    t
+  } = useTranslation('namespace');
+  const name = 'Sam';
+  return <Input label={t(\\"d81b0f\\", {
+    name
+  })} />;
 }"
 `;
 
