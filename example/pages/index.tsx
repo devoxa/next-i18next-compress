@@ -82,12 +82,24 @@ export default function Home() {
             libero quis finibus hendrerit.
           </Trans>
         </li>
-        {/* prettier-ignore */}
         <li>
           13: <Trans t={t}>Happy birthday, {{name}}!</Trans>
         </li>
         <li>
           14: <Trans t={t}>Happy birthday, {{ name }}!</Trans>
+        </li>
+      </ul>
+
+      {/* These are regression tests */}
+      <ul>
+        <li>
+          <Trans t={t}>
+            We did not recognize your email and/or password. Please try again or{' '}
+            <a href='/sign-in/request-reset-password'>
+              recover your password
+            </a>
+            .
+          </Trans>
         </li>
       </ul>
     </>

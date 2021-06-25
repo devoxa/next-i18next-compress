@@ -8,9 +8,9 @@
   },
   "scripts": {
     "test": "jest",
-    "format": "prettier --ignore-path='.gitignore' --list-different --write .",
-    "format:check": "prettier --ignore-path='.gitignore' --check .",
-    "lint": "eslint --ignore-path='.gitignore' '{src,tests}/**/*.ts'",
+    "format": "prettier --ignore-path='.prettierignore' --list-different --write .",
+    "format:check": "prettier --ignore-path='.prettierignore' --check .",
+    "lint": "eslint --ignore-path='.prettierignore' '{src,tests}/**/*.ts'",
     "build": "rm -rf dist/ && tsc",
     "preversion": "yarn build"
   },

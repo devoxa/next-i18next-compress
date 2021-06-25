@@ -171,6 +171,22 @@ describe('astToKey (JSX)', () => {
     expect(key).toEqual('Happy birthday, <1>birthday person {{name}}</1>!')
   })
 
+  it('(regression) correctly handles whitespace for trailing string literals', () => {
+    const key = astToKeyFromCode(`
+      <Trans t={t}>
+        We did not recognize your email and/or password. Please try again or{' '}
+        <a href='/sign-in/request-reset-password'>
+          recover your password
+        </a>
+        .
+      </Trans>
+    `)
+
+    expect(key).toEqual(
+      `We did not recognize your email and/or password. Please try again or <2>recover your password</2>.`
+    )
+  })
+
   it('errors on interpolated expression', () => {
     expect(() =>
       astToKeyFromCode(`
