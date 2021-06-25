@@ -1,0 +1,16 @@
+# Compiled Output
+dist/
+.next/
+
+# Tests
+coverage/
+__snapshots__/
+example/pages/index.tsx
+
+# Dependencies
+node_modules/
+yarn-debug.log*
+yarn-error.log*
+
+# Development Environments
+.history/

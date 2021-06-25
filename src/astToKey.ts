@@ -58,10 +58,11 @@ export function astToKey(ast: AbstractSyntaxTree, options: AstToKeyOptions): str
     if (astNode.type === 'JSXText') {
       let value = astNode.value
 
-      value = value.replace(/\n *$/g, '') // Ignore trailing newlines
-      value = value.replace(/\n */g, ' ') // Turn remaining newlines into spaces
-      if (i === 0) value = value.trimStart() // Trim the start if this is the first node
-      if (i === ast.length - 1) value = value.trimEnd() // Trim the end if this is the last node
+      // Strip leading and trailing newlines
+      value = value.replace(/^\n */g, '').replace(/\n *$/g, '')
+
+      // Turn remaining newlines into spaces
+      value = value.replace(/\n */g, ' ')
 
       key += value
       continue
