@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@devoxa/next-i18next-compress": "link:../",
-    "next": "11.1.1",
+    "next": "11.1.2",
     "next-i18next": "8.6.0",
     "react": "17.0.2",
     "react-dom": "17.0.2"
