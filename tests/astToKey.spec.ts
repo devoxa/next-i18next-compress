@@ -198,7 +198,7 @@ describe('astToKey (JSX)', () => {
   it('errors on spread children', () => {
     expect(() =>
       astToKeyFromCode(`
-        <Trans>Foo {...variable} bar</Trans>
+        <Trans>Foo {...variable}</Trans>
       `)
     ).toThrowErrorMatchingSnapshot()
   })
