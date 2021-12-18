@@ -16,7 +16,7 @@ exports[`astToKey (JSX) errors on interpolated expression 1`] = `
 exports[`astToKey (JSX) errors on spread children 1`] = `
 "/tests/client/src/test.jsx: [next-i18next-compress] Unsupported AST type: We do not know how to handle \\"JSXSpreadChild\\" in this part of your code:
 
-        <Trans>Foo {...variable} bar</Trans>
+        <Trans>Foo {...variable}</Trans>
       "
 `;
 
