@@ -19,7 +19,7 @@
   },
   "prettier": "@devoxa/prettier-config",
   "dependencies": {
-    "colors": "1.4.1"
+    "colors": "1.4.0"
   },
   "devDependencies": {
     "@babel/core": "7.16.7",
