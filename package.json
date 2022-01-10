@@ -24,8 +24,8 @@
   "devDependencies": {
     "@babel/core": "7.16.7",
     "@babel/plugin-syntax-jsx": "7.16.7",
-    "@babel/traverse": "7.16.7",
-    "@babel/types": "7.16.7",
+    "@babel/traverse": "7.16.8",
+    "@babel/types": "7.16.8",
     "@devoxa/eslint-config": "3.0.1",
     "@devoxa/prettier-config": "1.0.2",
     "@types/jest": "27.4.0",
