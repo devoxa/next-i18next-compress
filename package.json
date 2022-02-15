@@ -22,9 +22,9 @@
     "colors": "1.4.0"
   },
   "devDependencies": {
-    "@babel/core": "7.17.2",
+    "@babel/core": "7.17.3",
     "@babel/plugin-syntax-jsx": "7.16.7",
-    "@babel/traverse": "7.17.0",
+    "@babel/traverse": "7.17.3",
     "@babel/types": "7.17.0",
     "@devoxa/eslint-config": "3.0.1",
     "@devoxa/prettier-config": "1.0.2",
