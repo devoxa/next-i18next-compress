@@ -22,7 +22,7 @@ jobs:
           node-version: '14'
 
       - name: 'Cache dependencies'
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: './node_modules'
           key: ${{ runner.os }}-node_modules-${{ hashFiles('./yarn.lock') }}
@@ -46,7 +46,7 @@ jobs:
         run: yarn build
 
       - name: 'Cache dependencies (example)'
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: './example/node_modules'
           key: ${{ runner.os }}-node_modules-${{ hashFiles('example/yarn.lock') }}
