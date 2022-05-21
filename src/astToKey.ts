@@ -117,7 +117,7 @@ export function astToKey(ast: AbstractSyntaxTree, options: AstToKeyOptions): str
 }
 
 export class UnsupportedAstTypeError extends Error {
-  constructor(astNode: { type: string; start: number | null; end: number | null }, code: string) {
+  constructor(astNode: { type: string; start?: number | null; end?: number | null }, code: string) {
     let message =
       `[next-i18next-compress] Unsupported AST type: ` +
       `We do not know how to handle "${astNode.type}"`
