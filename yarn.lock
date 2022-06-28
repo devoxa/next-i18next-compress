@@ -710,10 +710,10 @@
     debug "^4.1.0"
     globals "^11.1.0"
 
-"@babel/types@7.18.6", "@babel/types@^7.18.6":
-  version "7.18.6"
-  resolved "https://registry.yarnpkg.com/@babel/types/-/types-7.18.6.tgz#5d781dd10a3f0c9f1f931bd19de5eb26ec31acf0"
-  integrity sha512-NdBNzPDwed30fZdDQtVR7ZgaO4UKjuaQFH9VArS+HMnurlOY0JWN+4ROlu/iapMFwjRQU4pOG4StZfDmulEwGA==
+"@babel/types@7.18.7":
+  version "7.18.7"
+  resolved "https://registry.yarnpkg.com/@babel/types/-/types-7.18.7.tgz#a4a2c910c15040ea52cdd1ddb1614a65c8041726"
+  integrity sha512-QG3yxTcTIBoAcQmkCs+wAPYZhu7Dk9rXKacINfNbdJDNERTbLQbHGyVG8q/YGMPeCJRIhSY0+fTc5+xuh6WPSQ==
   dependencies:
     "@babel/helper-validator-identifier" "^7.18.6"
     to-fast-properties "^2.0.0"
@@ -748,6 +748,14 @@
   integrity sha512-9O26jG0mBYfGkUYCYZRnBwbVLd1UZOICEr2Em6InB6jVfsAv1GKgwXHmrSg+WFWDmeKTA6vyTZiN8tCSM5Oo3A==
   dependencies:
     "@babel/helper-validator-identifier" "^7.16.7"
+    to-fast-properties "^2.0.0"
+
+"@babel/types@^7.18.6":
+  version "7.18.6"
+  resolved "https://registry.yarnpkg.com/@babel/types/-/types-7.18.6.tgz#5d781dd10a3f0c9f1f931bd19de5eb26ec31acf0"
+  integrity sha512-NdBNzPDwed30fZdDQtVR7ZgaO4UKjuaQFH9VArS+HMnurlOY0JWN+4ROlu/iapMFwjRQU4pOG4StZfDmulEwGA==
+  dependencies:
+    "@babel/helper-validator-identifier" "^7.18.6"
     to-fast-properties "^2.0.0"
 
 "@bcoe/v8-coverage@^0.2.3":
