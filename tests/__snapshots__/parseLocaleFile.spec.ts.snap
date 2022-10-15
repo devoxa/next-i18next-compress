@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`parseLocaleFile can configure the length of the compressed key 1`] = `
-Object {
+{
   "0d1f217dd077602b": "Oder <1>beginne deine 30-Tage kostenlose Probephase</1>",
   "bb42f8cd525dba08": "Passwort vergessen",
   "d81b0fdda384fc7e": "Alles Gute zum Geburtstag, {{name}}!",
@@ -11,7 +11,7 @@ Object {
 `;
 
 exports[`parseLocaleFile correctly compresses the keys of the locale file 1`] = `
-Object {
+{
   "0d1f21": "Oder <1>beginne deine 30-Tage kostenlose Probephase</1>",
   "bb42f8": "Passwort vergessen",
   "d81b0f": "Alles Gute zum Geburtstag, {{name}}!",
@@ -20,4 +20,4 @@ Object {
 }
 `;
 
-exports[`parseLocaleFile throws an error if there are any compression collisions 1`] = `"[next-i18next-compress] Compression collision: \\"Email address\\" and \\"Forgot password\\" compress to the same hash \\"foobar\\".Try increasing the \\"hashLength\\" option or splitting your locale file into multiple namespaces."`;
+exports[`parseLocaleFile throws an error if there are any compression collisions 1`] = `"[next-i18next-compress] Compression collision: "Email address" and "Forgot password" compress to the same hash "foobar".Try increasing the "hashLength" option or splitting your locale file into multiple namespaces."`;
