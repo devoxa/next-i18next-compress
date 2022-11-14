@@ -28,7 +28,7 @@
     "@babel/types": "7.20.2",
     "@devoxa/eslint-config": "3.0.1",
     "@devoxa/prettier-config": "1.0.2",
-    "@types/jest": "29.2.2",
+    "@types/jest": "29.2.3",
     "@types/node": "18.11.9",
     "eslint": "8.27.0",
     "jest": "29.3.1",
