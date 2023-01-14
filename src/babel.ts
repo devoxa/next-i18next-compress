@@ -1,8 +1,8 @@
-import * as BabelTypes from '@babel/types'
 import { Visitor } from '@babel/traverse'
+import * as BabelTypes from '@babel/types'
+import { AbstractSyntaxTree, astToKey, UnsupportedAstTypeError } from './astToKey'
 import { compressKey } from './compressKey'
 import { mergeDefaultOptions, Options } from './options'
-import { AbstractSyntaxTree, astToKey, UnsupportedAstTypeError } from './astToKey'
 
 // We keep a set of processed nodes, because Babel may traverse the same node twice,
 // which would cause us to compress the key twice.
