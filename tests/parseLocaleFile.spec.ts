@@ -1,5 +1,5 @@
-import { parseLocaleFile } from '../src/parseLocaleFile'
 import * as compressKeyModule from '../src/compressKey'
+import { parseLocaleFile } from '../src/parseLocaleFile'
 
 const compressKeySpy = jest.spyOn(compressKeyModule, 'compressKey')
 
