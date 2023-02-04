@@ -195,10 +195,10 @@ nanoid@^3.3.4:
   resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-3.3.4.tgz#730b67e3cd09e2deacf03c027c81c9d9dbc5e8ab"
   integrity sha512-MqBkQh/OHTS2egovRtLk45wEyNXwF+cokD+1YPf9u5VfJiRdAiRwB2froX5Co9Rh20xs4siNPm8naNotSD6RBw==
 
-next-i18next@13.1.0:
-  version "13.1.0"
-  resolved "https://registry.yarnpkg.com/next-i18next/-/next-i18next-13.1.0.tgz#a1fcb5c55044d6425c6f34453a08f18d34aa9d37"
-  integrity sha512-uWsMiZ1At3FdHhc2Q9wpGJ/3FYN5lsyzj+SV6PJ8TMwakiY60MrxNgs/v8TdpyQNvMeYHB0wKAtkwnEtcQPswg==
+next-i18next@13.1.4:
+  version "13.1.4"
+  resolved "https://registry.yarnpkg.com/next-i18next/-/next-i18next-13.1.4.tgz#02660bb936f9f80fbccea950731011a42a8657a9"
+  integrity sha512-//Ub7TCdbbNnI5rA6XEe+TLsiXaHR/7OjFBlXw5caPirHNCLvVs24NsmXl9z0ZIqqAT8T8I5hnPWIL75d84ubA==
   dependencies:
     "@babel/runtime" "^7.20.6"
     "@types/hoist-non-react-statics" "^3.3.1"
