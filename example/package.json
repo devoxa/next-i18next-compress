@@ -12,7 +12,7 @@
     "@devoxa/next-i18next-compress": "link:../",
     "i18next": "22.4.11",
     "next": "13.2.3",
-    "next-i18next": "13.2.1",
+    "next-i18next": "13.2.2",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-i18next": "12.2.0"
