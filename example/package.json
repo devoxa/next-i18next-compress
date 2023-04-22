@@ -18,7 +18,7 @@
     "react-i18next": "12.2.0"
   },
   "devDependencies": {
-    "@types/react": "18.0.37",
+    "@types/react": "18.0.38",
     "typescript": "5.0.4"
   }
 }
