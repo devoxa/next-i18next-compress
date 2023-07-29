@@ -20,5 +20,8 @@
   "devDependencies": {
     "@types/react": "18.2.17",
     "typescript": "5.1.6"
+  },
+  "volta": {
+    "node": "18.17.0"
   }
 }

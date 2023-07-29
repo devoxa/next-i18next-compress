@@ -1,5 +1,8 @@
 {
   "name": "@devoxa/next-i18next-compress-config",
   "browser": "./browser.js",
-  "main": "./node.js"
+  "main": "./node.js",
+  "volta": {
+    "node": "18.17.0"
+  }
 }
