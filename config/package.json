@@ -1,5 +1,6 @@
 {
   "name": "@devoxa/next-i18next-compress-config",
+  "license": "MIT",
   "browser": "./browser.js",
   "main": "./node.js",
   "volta": {
