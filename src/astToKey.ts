@@ -90,7 +90,7 @@ export function astToKey(ast: AbstractSyntaxTree, options: AstToKeyOptions): str
     // This is an interpolated variable, like "t(`<Trans>Foo {{bar}}</Trans>`)" in JSX components.
     // "t('Foo {{bar}}')" in template strings is handled like a string literal.
     if (options.jsx && astNode.type === 'ObjectExpression') {
-      // istanbul ignore next
+      /* c8 ignore next 3 */
       if (!astNode.start || !astNode.end) {
         throw new Error('Start or end of a AST node are missing, please file a bug report!')
       }
@@ -138,7 +138,7 @@ function printCodeRange(code: string, start: number, end: number, padding: numbe
   const slicedCode = code.slice(start, end)
   const slicedEndPadding = code.slice(end, Math.min(code.length, end + padding))
 
-  // istanbul ignore next
+  /* c8 ignore next */
   const format = process.env.NODE_ENV === 'test' ? (x: string) => x : colors.red
 
   return slicedStartPadding + format(slicedCode) + slicedEndPadding

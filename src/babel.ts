@@ -42,7 +42,7 @@ export default function nextI18nextCompressBabelPlugin(babel: Babel): {
 
         const options = mergeDefaultOptions(state.opts)
 
-        // istanbul ignore next
+        /* c8 ignore next */
         if (processedNodes.has(path.node)) return
 
         // Only handle functions with the name `t` and at least one argument
@@ -81,7 +81,7 @@ export default function nextI18nextCompressBabelPlugin(babel: Babel): {
 
         const options = mergeDefaultOptions(state.opts)
 
-        // istanbul ignore next
+        /* c8 ignore next */
         if (processedNodes.has(path.node)) return
 
         // Only handle JSX elements with the name `Trans`
