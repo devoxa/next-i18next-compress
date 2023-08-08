@@ -1,7 +1,10 @@
 import * as compressKeyModule from '../src/compressKey'
 import { parseLocaleFile } from '../src/parseLocaleFile'
 
-const compressKeySpy = jest.spyOn(compressKeyModule, 'compressKey')
+jest.mock('../src/compressKey')
+const mockCompressKey = jest
+  .mocked(compressKeyModule.compressKey)
+  .mockImplementation(jest.requireActual('../src/compressKey').compressKey)
 
 const localeFileString = JSON.stringify({
   'Email address': 'E-Mail Adresse',
@@ -22,7 +25,7 @@ describe('parseLocaleFile', () => {
   })
 
   test('throws an error if there are any compression collisions', async () => {
-    compressKeySpy.mockImplementation(() => 'foobar')
+    mockCompressKey.mockImplementation(() => 'foobar')
     expect(() => parseLocaleFile(localeFileString)).toThrowErrorMatchingSnapshot()
   })
 
