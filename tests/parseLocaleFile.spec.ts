@@ -13,20 +13,20 @@ const localeFileString = JSON.stringify({
 })
 
 describe('parseLocaleFile', () => {
-  it('correctly compresses the keys of the locale file', () => {
+  test('correctly compresses the keys of the locale file', () => {
     expect(parseLocaleFile(localeFileString)).toMatchSnapshot()
   })
 
-  it('can configure the length of the compressed key', () => {
+  test('can configure the length of the compressed key', () => {
     expect(parseLocaleFile(localeFileString, { hashLength: 16 })).toMatchSnapshot()
   })
 
-  it('throws an error if there are any compression collisions', async () => {
+  test('throws an error if there are any compression collisions', async () => {
     compressKeySpy.mockImplementation(() => 'foobar')
     expect(() => parseLocaleFile(localeFileString)).toThrowErrorMatchingSnapshot()
   })
 
-  it('does nothing if running in development', () => {
+  test('does nothing if running in development', () => {
     process.env.NODE_ENV = 'development'
     expect(parseLocaleFile(localeFileString)).toEqual(JSON.parse(localeFileString))
   })

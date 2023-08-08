@@ -37,7 +37,7 @@ function astToKeyFromCode(code: string) {
 }
 
 describe('astToKey (functional)', () => {
-  it('handles basic text', () => {
+  test('handles basic text', () => {
     const key = astToKeyFromCode(`
       t('Sign in to your account')
     `)
@@ -45,7 +45,7 @@ describe('astToKey (functional)', () => {
     expect(key).toEqual('Sign in to your account')
   })
 
-  it('handles template literal', () => {
+  test('handles template literal', () => {
     const key = astToKeyFromCode(`
       t(\`Sign in to your account\`)
     `)
@@ -53,7 +53,7 @@ describe('astToKey (functional)', () => {
     expect(key).toEqual('Sign in to your account')
   })
 
-  it('handles interpolated variable', () => {
+  test('handles interpolated variable', () => {
     const key = astToKeyFromCode(`
       const name = 'Sam'
       t(\`Happy birthday, {{name}}!\`, { name })
@@ -62,7 +62,7 @@ describe('astToKey (functional)', () => {
     expect(key).toEqual('Happy birthday, {{name}}!')
   })
 
-  it('handles multiple interpolated variables', () => {
+  test('handles multiple interpolated variables', () => {
     const key = astToKeyFromCode(`
       t(\`Big thanks to {{a}} and {{ b }}.\`)
     `)
@@ -72,7 +72,7 @@ describe('astToKey (functional)', () => {
 })
 
 describe('astToKey (JSX)', () => {
-  it('handles basic text', () => {
+  test('handles basic text', () => {
     const key = astToKeyFromCode(`
       <Trans t={t}>
         Sign in to your account
@@ -82,7 +82,7 @@ describe('astToKey (JSX)', () => {
     expect(key).toEqual('Sign in to your account')
   })
 
-  it('handles basic text and a comment', () => {
+  test('handles basic text and a comment', () => {
     const key = astToKeyFromCode(`
       <Trans t={t}>
         Sign in to your account
@@ -93,7 +93,7 @@ describe('astToKey (JSX)', () => {
     expect(key).toEqual('Sign in to your account')
   })
 
-  it('handles basic text and explicit whitespace', () => {
+  test('handles basic text and explicit whitespace', () => {
     const key = astToKeyFromCode(`
       <Trans t={t}>
         Sign in to{'  '}your account{' '}
@@ -103,7 +103,7 @@ describe('astToKey (JSX)', () => {
     expect(key).toEqual('Sign in to  your account ')
   })
 
-  it('handles basic text and stripped whitespace', () => {
+  test('handles basic text and stripped whitespace', () => {
     const key = astToKeyFromCode(`
       <Trans t={t}>
         Lorem ipsum dolor sit amet,
@@ -114,7 +114,7 @@ describe('astToKey (JSX)', () => {
     expect(key).toEqual('Lorem ipsum dolor sit amet, consectetur adipiscing elit.')
   })
 
-  it('handles interpolated component', () => {
+  test('handles interpolated component', () => {
     const key = astToKeyFromCode(`
       <Trans t={t}>
         Or <NextLink href='/register'>start your 30-day free trial</NextLink>
@@ -124,7 +124,7 @@ describe('astToKey (JSX)', () => {
     expect(key).toEqual('Or <1>start your 30-day free trial</1>')
   })
 
-  it('handles multiple interpolated components', () => {
+  test('handles multiple interpolated components', () => {
     const key = astToKeyFromCode(`
       <Trans t={t}>
         You have read and acknowledge the{' '}
@@ -137,7 +137,7 @@ describe('astToKey (JSX)', () => {
     )
   })
 
-  it('handles self-closing interpolated component', () => {
+  test('handles self-closing interpolated component', () => {
     const key = astToKeyFromCode(`
       <Trans t={t}>
         <Iceberg /> There's something in the water.
@@ -147,7 +147,7 @@ describe('astToKey (JSX)', () => {
     expect(key).toEqual("<0></0> There's something in the water.")
   })
 
-  it('handles interpolated variable', () => {
+  test('handles interpolated variable', () => {
     const key = astToKeyFromCode(`
       <Trans t={t}>Happy birthday, {{name}}!</Trans>
     `)
@@ -155,7 +155,7 @@ describe('astToKey (JSX)', () => {
     expect(key).toEqual('Happy birthday, {{name}}!')
   })
 
-  it('handles multiple interpolated variables', () => {
+  test('handles multiple interpolated variables', () => {
     const key = astToKeyFromCode(`
       <Trans t={t}>Big thanks to {{a}} and {{ b }}.</Trans>
     `)
@@ -163,7 +163,7 @@ describe('astToKey (JSX)', () => {
     expect(key).toEqual('Big thanks to {{a}} and {{ b }}.')
   })
 
-  it('handles interpolated variable inside of an interpolated component', () => {
+  test('handles interpolated variable inside of an interpolated component', () => {
     const key = astToKeyFromCode(`
       <Trans t={t}>Happy birthday, <Bold>birthday person {{name}}</Bold>!</Trans>
     `)
@@ -171,7 +171,7 @@ describe('astToKey (JSX)', () => {
     expect(key).toEqual('Happy birthday, <1>birthday person {{name}}</1>!')
   })
 
-  it('(regression) correctly handles whitespace for trailing string literals', () => {
+  test('(regression) correctly handles whitespace for trailing string literals', () => {
     const key = astToKeyFromCode(`
       <Trans t={t}>
         We did not recognize your email and/or password. Please try again or{' '}
@@ -187,7 +187,7 @@ describe('astToKey (JSX)', () => {
     )
   })
 
-  it('errors on interpolated expression', () => {
+  test('errors on interpolated expression', () => {
     expect(() =>
       astToKeyFromCode(`
         <Trans t={t}>They do travel in herds: {array.join(', ')}</Trans>
@@ -195,7 +195,7 @@ describe('astToKey (JSX)', () => {
     ).toThrowErrorMatchingSnapshot()
   })
 
-  it('errors on spread children', () => {
+  test('errors on spread children', () => {
     expect(() =>
       astToKeyFromCode(`
         <Trans>Foo {...variable}</Trans>
@@ -203,7 +203,7 @@ describe('astToKey (JSX)', () => {
     ).toThrowErrorMatchingSnapshot()
   })
 
-  it('errors on fragment', () => {
+  test('errors on fragment', () => {
     expect(() =>
       astToKeyFromCode(`
         <Trans>Foo <>bar</></Trans>
@@ -211,7 +211,7 @@ describe('astToKey (JSX)', () => {
     ).toThrowErrorMatchingSnapshot()
   })
 
-  it('errors on unknown AST type', () => {
+  test('errors on unknown AST type', () => {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore Forcing an invalid AST type
     expect(() => astToKey([{ type: 'Foobar' }], {})).toThrowErrorMatchingSnapshot()
