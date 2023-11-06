@@ -18,7 +18,7 @@
     "react-i18next": "13.3.1"
   },
   "devDependencies": {
-    "@types/react": "18.2.35",
+    "@types/react": "18.2.36",
     "typescript": "5.2.2"
   },
   "volta": {
